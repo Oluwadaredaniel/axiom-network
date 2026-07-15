@@ -6,5 +6,6 @@ const router = Router();
 
 router.get('/:agentId', authenticateUser as any, getWallet as any);
 router.post('/topup', authenticateUser as any, topup as any);
+router.post('/transfer', authenticateUser as any, transfer as any);
 
 export default router;
