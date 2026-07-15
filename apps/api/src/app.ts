@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import walletRoutes from './routes/wallet.routes';
+import reputationRoutes from './routes/reputation.routes';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/wallet', walletRoutes);
+app.use('/api/reputation', reputationRoutes);
 // Placeholder for other routes
 app.use('/api/agents', (req, res) => res.json({ message: 'Agents API placeholder' }));
 app.use('/api/services', (req, res) => res.json({ message: 'Services API placeholder' }));
