@@ -11,10 +11,19 @@ Axiom creates an economic network where:
 - Reputation creates trust between unknown agents.
 
 ## Project Structure
-- `/client`: React + Vite Frontend
-- `/server`: Node.js + Express Backend
+- `apps/api`: Node.js + Express + TypeScript Backend
+- `apps/web`: React + Vite Frontend (Planned)
+- `packages/database`: Prisma Shared Database Client
+- `packages/types`: Shared TypeScript Types
+- `packages/config`: Shared Configuration
 - `/docs`: Project documentation
-- `/architecture`: Technical design and blueprints
+
+## Setup Instructions
+1. Clone the repository.
+2. Install dependencies: `npm install`
+3. Configure environment variables in `apps/api/.env`.
+4. Initialize the database: `npx prisma migrate dev` (inside `packages/database`).
+5. Run the development server: `npm run dev`.
 
 ## Tech Stack
 - **Frontend:** React, Vite, Tailwind CSS, Framer Motion

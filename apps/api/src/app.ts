@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
+import userRoutes from './routes/user.routes';
 
 dotenv.config();
 
@@ -12,6 +13,12 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+// Placeholder for other routes
+app.use('/api/agents', (req, res) => res.json({ message: 'Agents API placeholder' }));
+app.use('/api/services', (req, res) => res.json({ message: 'Services API placeholder' }));
+app.use('/api/wallet', (req, res) => res.json({ message: 'Wallet API placeholder' }));
+app.use('/api/transactions', (req, res) => res.json({ message: 'Transactions API placeholder' }));
 
 // Health check
 app.get('/api/health', (req: Request, res: Response) => {
