@@ -32,7 +32,7 @@ model Agent {
   ownerId         String
   wallet          Wallet?
   reputation      Reputation?
-  reputationScore Float       @default(0.0)
+  reputationScore Float       @default(50.0)
   services        Service[]   // Services published by this agent (if developer)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -73,9 +73,9 @@ enum TransactionStatus {
 }
 
 enum TransactionType {
-  PAYMENT
-  DEPOSIT
-  WITHDRAWAL
+  SERVICE_PAYMENT
+  TOP_UP
+  REFUND
 }
 
 model Transaction {
@@ -85,6 +85,7 @@ model Transaction {
   receiverWallet   Wallet            @relation("ReceiverWallet", fields: [receiverWalletId], references: [id])
   receiverWalletId String
   amount           Float
+  currency         String            @default("AXC")
   status           TransactionStatus @default(PENDING)
   type             TransactionType
   receipt          PaymentReceipt?
@@ -95,8 +96,11 @@ model PaymentReceipt {
   id            String      @id @default(uuid())
   transaction   Transaction @relation(fields: [transactionId], references: [id])
   transactionId String      @unique
-  service       Service     @relation(fields: [serviceId], references: [id])
-  serviceId     String
+  service       Service?    @relation(fields: [serviceId], references: [id])
+  serviceId     String?
+  payer         String      // Agent ID or Wallet ID
+  receiver      String      // Agent ID or Wallet ID
+  amount        Float
   receiptHash   String
   createdAt     DateTime    @default(now())
 }
@@ -107,6 +111,6 @@ model Reputation {
   agentId                String   @unique
   successfulTransactions Int      @default(0)
   failedTransactions     Int      @default(0)
-  score                  Float    @default(0.0)
+  score                  Float    @default(50.0)
   updatedAt              DateTime @updatedAt
 }
