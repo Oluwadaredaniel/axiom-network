@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  DEVELOPER
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  agents    Agent[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Agent {
+  id              String      @id @default(uuid())
+  name            String
+  description     String?
+  owner           User        @relation(fields: [ownerId], references: [id])
+  ownerId         String
+  wallet          Wallet?
+  reputation      Reputation?
+  reputationScore Float       @default(0.0)
+  services        Service[]   // Services published by this agent (if developer)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Service {
+  id          String           @id @default(uuid())
+  provider    Agent            @relation(fields: [providerId], references: [id])
+  providerId  String
+  name        String
+  description String
+  category    String
+  endpoint    String
+  price       Float            @default(0.0) // Price in AXC
+  status      String           @default("ACTIVE")
+  rating      Float            @default(0.0)
+  receipts    PaymentReceipt[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Wallet {
+  id            String        @id @default(uuid())
+  agent         Agent         @relation(fields: [agentId], references: [id])
+  agentId       String        @unique
+  balance       Float         @default(0.0)
+  currency      String        @default("AXC")
+  sentTransactions     Transaction[] @relation("SenderWallet")
+  receivedTransactions Transaction[] @relation("ReceiverWallet")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum TransactionType {
+  PAYMENT
+  DEPOSIT
+  WITHDRAWAL
+}
+
+model Transaction {
+  id               String            @id @default(uuid())
+  senderWallet     Wallet            @relation("SenderWallet", fields: [senderWalletId], references: [id])
+  senderWalletId   String
+  receiverWallet   Wallet            @relation("ReceiverWallet", fields: [receiverWalletId], references: [id])
+  receiverWalletId String
+  amount           Float
+  status           TransactionStatus @default(PENDING)
+  type             TransactionType
+  receipt          PaymentReceipt?
+  createdAt        DateTime          @default(now())
+}
+
+model PaymentReceipt {
+  id            String      @id @default(uuid())
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId String      @unique
+  service       Service     @relation(fields: [serviceId], references: [id])
+  serviceId     String
+  receiptHash   String
+  createdAt     DateTime    @default(now())
+}
+
+model Reputation {
+  id                     String   @id @default(uuid())
+  agent                  Agent    @relation(fields: [agentId], references: [id])
+  agentId                String   @unique
+  successfulTransactions Int      @default(0)
+  failedTransactions     Int      @default(0)
+  score                  Float    @default(0.0)
+  updatedAt              DateTime @updatedAt
+}
