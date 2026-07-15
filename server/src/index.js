@@ -15,9 +15,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'Axiom API is running', version: '1.0.0' });
 });
 
-// Routes will be added here
-// app.use('/api/auth', require('./routes/auth.routes'));
-// app.use('/api/marketplace', require('./routes/marketplace.routes'));
+// Routes
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/marketplace', require('./routes/marketplace.routes'));
 
 app.listen(PORT, () => {
   console.log(`Axiom Server running on port ${PORT}`);
