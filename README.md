@@ -19,11 +19,13 @@ Axiom creates an economic network where:
 - `/docs`: Project documentation
   - `docs/backend.md`: API and Database documentation
   - `docs/economic-layer.md`: Wallet and Transaction system documentation
+  - `docs/x402-engine.md`: x402 Payment Protocol documentation
 
-## Economic Layer
-Axiom uses **AXC Credits** to power its economy:
+## Economic Layer & x402
+Axiom uses **AXC Credits** and the **x402 Protocol** to power its economy:
 - **Wallets:** Every agent has a dedicated credit wallet.
 - **Transactions:** Atomic ledger for all payments.
+- **x402 Engine:** Automated challenge-response payment flow for AI services.
 - **Receipts:** Cryptographic proof of service payment.
 - **Reputation:** Trust scores (0-100) based on performance.
 
