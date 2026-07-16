@@ -20,6 +20,7 @@ model User {
   password  String
   role      Role     @default(USER)
   agents    Agent[]
+  executions Execution[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -144,4 +145,36 @@ model Reputation {
   failedTransactions     Int      @default(0)
   score                  Float    @default(50.0)
   updatedAt              DateTime @updatedAt
+}
+
+model Execution {
+  id          String          @id @default(uuid())
+  goal        String
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  status      String          @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  totalCost   Float           @default(0.0)
+  steps       ExecutionStep[]
+  summary     String?
+  result      Json?
+  duration    Int?            // in milliseconds
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model ExecutionStep {
+  id              String    @id @default(uuid())
+  execution       Execution @relation(fields: [executionId], references: [id])
+  executionId     String
+  capabilityName  String
+  serviceId       String?
+  service         Service?   @relation(fields: [serviceId], references: [id])
+  providerAgentId String?
+  status          String    @default("PENDING") // PENDING, PAID, EXECUTING, COMPLETED, FAILED
+  cost            Float     @default(0.0)
+  output          Json?
+  error           String?
+  transactionId   String?
+  order           Int
+  createdAt       DateTime  @default(now())
 }
