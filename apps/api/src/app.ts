@@ -36,6 +36,10 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'Axiom backend running' });
 });
 
+app.get('/api/market-health', (req: Request, res: Response) => {
+  res.status(200).json({ status: 'Marketplace services online' });
+});
+
 // Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
