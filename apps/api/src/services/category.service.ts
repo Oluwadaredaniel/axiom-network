@@ -3,6 +3,11 @@ import prisma from 'database';
 export class CategoryService {
   static async getAllCategories() {
     return await prisma.serviceCategory.findMany({
+      include: {
+        _count: {
+          select: { services: true }
+        }
+      },
       orderBy: { name: 'asc' }
     });
   }
