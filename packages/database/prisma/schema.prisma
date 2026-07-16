@@ -136,6 +136,7 @@ model PaymentReceipt {
   receiver      String      // Agent ID or Wallet ID
   amount        Float
   receiptHash   String
+  used          Boolean     @default(false)
   createdAt     DateTime    @default(now())
 
   @@index([serviceId])

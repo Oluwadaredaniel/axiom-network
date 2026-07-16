@@ -23,12 +23,15 @@ export class PaymentVerificationService {
       return { verified: false, reason: 'Insufficient payment amount' };
     }
 
-    // Check if receipt is old (optional but good practice)
-    const now = new Date();
-    const age = now.getTime() - receipt.createdAt.getTime();
-    if (age > 1000 * 60 * 60 * 24) { // 24 hours expiry for proof of payment usage in this context
-       // In a real x402, this might be tighter or handled by specific challenge nonces
+    if (receipt.used) {
+      return { verified: false, reason: 'Receipt already used' };
     }
+
+    // Mark receipt as used to prevent replay attacks
+    await prisma.paymentReceipt.update({
+      where: { id: receipt.id },
+      data: { used: true }
+    });
 
     return { verified: true };
   }
