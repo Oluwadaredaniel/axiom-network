@@ -47,9 +47,9 @@ graph TD
 ```
 
 ## 🛠️ Tech Stack
-- **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, Framer Motion, TanStack Query.
-- **Backend:** Node.js, Express, TypeScript, Prisma ORM.
-- **Database:** PostgreSQL with performance indexing.
+- **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, Framer Motion (Animations), TanStack Query (State), Lucide (Icons).
+- **Backend:** Node.js, Express, TypeScript, Zod (Validation), Helmet (Security).
+- **Database:** PostgreSQL with Prisma ORM, Performance Indexing.
 - **Economic Layer:** Simulated x402 Payment Protocol, AXC Tokenization ($0.001/AXC).
 - **Orchestration:** Rule-based planning & recursive agent hiring.
 
