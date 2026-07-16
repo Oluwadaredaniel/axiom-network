@@ -13,6 +13,7 @@ import categoryRoutes from './routes/category.routes';
 import analyticsRoutes from './routes/analytics.routes';
 import conductorRoutes from './routes/conductor.routes';
 import officialRoutes from './routes/official.routes';
+import prisma from 'database';
 
 dotenv.config();
 
@@ -50,10 +51,18 @@ app.use('/api/services', (req, res) => res.json({ message: 'Services API placeho
 app.use('/api/transactions', (req, res) => res.json({ message: 'Transactions API placeholder' }));
 
 // Health check
-app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({
-    success: true,
-    status: 'UP',
+app.get('/api/health', async (req: Request, res: Response) => {
+  let dbStatus = 'UP';
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+  } catch (e) {
+    dbStatus = 'DOWN';
+  }
+
+  res.status(dbStatus === 'UP' ? 200 : 503).json({
+    success: dbStatus === 'UP',
+    status: dbStatus,
+    database: dbStatus,
     timestamp: new Date().toISOString(),
     version: '1.0.0'
   });
