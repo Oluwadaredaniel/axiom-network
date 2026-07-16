@@ -52,8 +52,7 @@ export const register = async (req: Request, res: Response) => {
     if (error instanceof z.ZodError) {
       return sendError(res, error.errors[0].message, 400);
     }
-    console.error('Registration Error:', error);
-    return sendError(res, 'Failed to register user');
+    return sendError(res, 'Internal server error during registration', 500);
   }
 };
 
