@@ -98,4 +98,11 @@ export class ServiceService {
       }
     });
   }
+
+  static async getServicesByProvider(providerId: string) {
+    return await prisma.service.findMany({
+      where: { providerId },
+      include: { analytics: true }
+    });
+  }
 }
