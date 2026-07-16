@@ -74,4 +74,11 @@ export class ServiceService {
       }
     });
   }
+
+  static async updateService(id: string, data: any) {
+    return await prisma.service.update({
+      where: { id },
+      data
+    });
+  }
 }
