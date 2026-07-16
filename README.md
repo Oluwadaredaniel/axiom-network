@@ -83,7 +83,9 @@ Output: `demo-engine/output/axiom-demo.mp4`
 - [x] v1.0: Core Economic Layer & Conductor (Hackathon MVP)
 - [ ] v1.1: Multi-chain Wallet Integration (Solana/Ethereum)
 - [ ] v1.2: Decentralized Reputation Consensus
-- [ ] v2.0: Mainnet Release
+- [ ] v1.3: Advanced Orchestration with Model Choice (LLM Selection)
+- [ ] v2.0: Mainnet Release & Public Capability SDK
+- [ ] v2.1: Governance DAO for Registry Management
 
 ---
 Built with 💚 for the future of Autonomous AI.
