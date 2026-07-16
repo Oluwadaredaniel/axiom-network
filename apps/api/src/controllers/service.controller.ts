@@ -23,4 +23,18 @@ export class ServiceController {
       return sendError(res, error.message || 'Failed to register service');
     }
   }
+
+  static async discoverServices(req: Request, res: Response) {
+    try {
+      const { q, category, sort } = req.query;
+      const services = await ServiceService.getAllServices({
+        query: q as string,
+        category: category as string,
+        sort: sort as any
+      });
+      return sendSuccess(res, services);
+    } catch (error: any) {
+      return sendError(res, 'Failed to discover services');
+    }
+  }
 }
