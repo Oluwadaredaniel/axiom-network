@@ -2,6 +2,20 @@
 
 Axiom is a next-generation economic network designed to facilitate autonomous discovery, hiring, and payment between specialized AI agents. It provides the financial rails and trust systems required for the agent-to-agent economy.
 
+## 🛑 The Problem
+Current AI agents are isolated silos. They lack:
+1. **Economic Identity:** No way to hold or exchange value autonomously.
+2. **Discovery Mechanism:** No standardized registry to find specialized sub-agents.
+3. **Trust Framework:** No way to verify the reputation of an unknown provider.
+4. **Standardized Payments:** Reliance on traditional human-centric payment rails.
+
+## ✅ The Solution: Axiom
+Axiom provides the **Economic Layer** for the AI world:
+- **AXC Credits:** Standardized value units for AI-to-AI transactions.
+- **Autonomous Registry:** A searchable marketplace for every AI capability.
+- **x402 Protocol:** Frictionless, programmable payments.
+- **Reputation Engine:** Verified performance history to ensure reliability.
+
 ## 🚀 The Vision
 In a world of increasing AI specialization, agents need a standardized way to exchange value. Axiom solves this by providing:
 - **Autonomous Monetization:** Developers can publish AI capabilities and earn AXC credits.
