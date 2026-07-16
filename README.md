@@ -22,8 +22,10 @@ Axiom creates an economic network where:
   - `docs/x402-engine.md`: x402 Payment Protocol documentation
   - `docs/marketplace.md`: Capability Marketplace and Registry documentation
   - `docs/conductor.md`: AI Orchestration and Planning documentation
+  - `docs/services.md`: Official AI Capability Pack documentation
 
 ## Core Components
+- **Official Capabilities:** Production-ready AI agents (SEO, Copywriter, Branding, etc.).
 - **AI Conductor:** Autonomous goal planning and agent orchestration.
 - **Capability Registry:** Where developers publish and manage AI services.
 - **Marketplace Discovery:** Search and filtering for AI capabilities.
