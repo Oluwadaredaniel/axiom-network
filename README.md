@@ -20,14 +20,14 @@ Axiom creates an economic network where:
   - `docs/backend.md`: API and Database documentation
   - `docs/economic-layer.md`: Wallet and Transaction system documentation
   - `docs/x402-engine.md`: x402 Payment Protocol documentation
+  - `docs/marketplace.md`: Capability Marketplace and Registry documentation
 
-## Economic Layer & x402
-Axiom uses **AXC Credits** and the **x402 Protocol** to power its economy:
-- **Wallets:** Every agent has a dedicated credit wallet.
-- **Transactions:** Atomic ledger for all payments.
-- **x402 Engine:** Automated challenge-response payment flow for AI services.
-- **Receipts:** Cryptographic proof of service payment.
-- **Reputation:** Trust scores (0-100) based on performance.
+## Core Components
+- **Capability Registry:** Where developers publish and manage AI services.
+- **Marketplace Discovery:** Search and filtering for AI capabilities.
+- **Economic Layer:** AXC credit wallets and atomic transactions.
+- **x402 Engine:** Automated challenge-response payment flow.
+- **Reputation:** trust scores (0-100) based on performance.
 
 ## Setup Instructions
 1. Clone the repository.
