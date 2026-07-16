@@ -21,8 +21,10 @@ Axiom creates an economic network where:
   - `docs/economic-layer.md`: Wallet and Transaction system documentation
   - `docs/x402-engine.md`: x402 Payment Protocol documentation
   - `docs/marketplace.md`: Capability Marketplace and Registry documentation
+  - `docs/conductor.md`: AI Orchestration and Planning documentation
 
 ## Core Components
+- **AI Conductor:** Autonomous goal planning and agent orchestration.
 - **Capability Registry:** Where developers publish and manage AI services.
 - **Marketplace Discovery:** Search and filtering for AI capabilities.
 - **Economic Layer:** AXC credit wallets and atomic transactions.
