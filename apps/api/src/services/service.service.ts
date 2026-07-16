@@ -81,4 +81,10 @@ export class ServiceService {
       data
     });
   }
+
+  static async deleteService(id: string) {
+    return await prisma.service.delete({
+      where: { id }
+    });
+  }
 }
