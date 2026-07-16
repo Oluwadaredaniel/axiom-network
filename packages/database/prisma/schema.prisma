@@ -37,6 +37,9 @@ model Agent {
   services        Service[]   // Services published by this agent (if developer)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  @@index([ownerId])
+  @@index([reputationScore])
 }
 
 model Service {
@@ -55,8 +58,13 @@ model Service {
   usageCount      Int              @default(0)
   analytics       ServiceAnalytics?
   receipts        PaymentReceipt[]
+  steps           ExecutionStep[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+
+  @@index([categoryName])
+  @@index([status])
+  @@index([price])
 }
 
 model ServiceCategory {
@@ -111,6 +119,11 @@ model Transaction {
   type             TransactionType
   receipt          PaymentReceipt?
   createdAt        DateTime          @default(now())
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([senderWalletId])
+  @@index([receiverWalletId])
 }
 
 model PaymentReceipt {
@@ -124,6 +137,10 @@ model PaymentReceipt {
   amount        Float
   receiptHash   String
   createdAt     DateTime    @default(now())
+
+  @@index([serviceId])
+  @@index([payer])
+  @@index([receiver])
 }
 
 model PaymentChallenge {
@@ -135,6 +152,9 @@ model PaymentChallenge {
   status          String   @default("PENDING") // PENDING, SETTLED, EXPIRED
   expiresAt       DateTime
   createdAt       DateTime @default(now())
+
+  @@index([status])
+  @@index([expiresAt])
 }
 
 model Reputation {
@@ -160,6 +180,9 @@ model Execution {
   duration    Int?            // in milliseconds
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([status])
 }
 
 model ExecutionStep {
@@ -177,4 +200,7 @@ model ExecutionStep {
   transactionId   String?
   order           Int
   createdAt       DateTime  @default(now())
+
+  @@index([executionId])
+  @@index([serviceId])
 }
