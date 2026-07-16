@@ -1,12 +1,26 @@
 import { Request, Response } from 'express';
+import { z } from 'zod';
 import { WalletService } from '../services/wallet.service';
 import { TransactionService } from '../services/transaction.service';
 import { sendSuccess, sendError } from '../utils/response';
 import { TransactionType } from 'database';
 
+const topupSchema = z.object({
+  agentId: z.string().uuid(),
+  amount: z.number().positive(),
+});
+
+const transferSchema = z.object({
+  senderWallet: z.string().uuid(),
+  receiverWallet: z.string().uuid(),
+  amount: z.number().positive(),
+});
+
 export const getWallet = async (req: Request, res: Response) => {
   try {
     const { agentId } = req.params;
+    if (!agentId) return sendError(res, 'Agent ID is required', 400);
+
     const wallet = await WalletService.getWalletByAgentId(agentId);
 
     if (!wallet) return sendError(res, 'Wallet not found', 404);
@@ -24,8 +38,8 @@ export const getWallet = async (req: Request, res: Response) => {
 
 export const topup = async (req: Request, res: Response) => {
   try {
-    const { agentId, amount } = req.body;
-    if (!agentId || !amount) return sendError(res, 'Missing agentId or amount', 400);
+    const validatedData = topupSchema.parse(req.body);
+    const { agentId, amount } = validatedData;
 
     const wallet = await WalletService.getWalletByAgentId(agentId);
     if (!wallet) return sendError(res, 'Wallet not found', 404);
@@ -38,17 +52,18 @@ export const topup = async (req: Request, res: Response) => {
     });
 
     return sendSuccess(res, { wallet, transaction });
-  } catch (error) {
+  } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return sendError(res, error.errors[0].message, 400);
+    }
     return sendError(res, 'Failed to topup wallet');
   }
 };
 
 export const transfer = async (req: Request, res: Response) => {
   try {
-    const { senderWallet, receiverWallet, amount } = req.body;
-    if (!senderWallet || !receiverWallet || !amount) {
-      return sendError(res, 'Missing required fields', 400);
-    }
+    const validatedData = transferSchema.parse(req.body);
+    const { senderWallet, receiverWallet, amount } = validatedData;
 
     const transaction = await TransactionService.createTransaction({
       senderWalletId: senderWallet,
@@ -62,6 +77,9 @@ export const transfer = async (req: Request, res: Response) => {
       transactionId: transaction.id
     });
   } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return sendError(res, error.errors[0].message, 400);
+    }
     return sendError(res, error.message || 'Transfer failed');
   }
 };
