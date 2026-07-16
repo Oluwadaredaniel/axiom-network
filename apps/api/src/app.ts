@@ -51,7 +51,12 @@ app.use('/api/transactions', (req, res) => res.json({ message: 'Transactions API
 
 // Health check
 app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'Axiom backend running' });
+  res.status(200).json({
+    success: true,
+    status: 'UP',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  });
 });
 
 app.get('/api/market-health', (req: Request, res: Response) => {
