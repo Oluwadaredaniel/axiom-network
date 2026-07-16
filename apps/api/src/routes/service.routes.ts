@@ -1,14 +1,13 @@
 import { Router } from 'express';
-import { x402Middleware } from '../middleware/x402.middleware';
-import { sendSuccess } from '../utils/response';
+import { ServiceController } from '../controllers/service.controller';
+import { authenticateUser } from '../middleware/auth.middleware';
 
 const router = Router();
 
-router.post('/:serviceId/execute', x402Middleware as any, (req, res) => {
-  return sendSuccess(res, {
-      message: 'Service executed successfully',
-      result: 'Capability output for ' + req.params.serviceId
-  });
-});
+router.get('/', ServiceController.discoverServices);
+router.post('/', authenticateUser as any, ServiceController.registerService);
+router.get('/:id', ServiceController.getServiceDetails);
+router.patch('/:id', authenticateUser as any, ServiceController.updateService);
+router.delete('/:id', authenticateUser as any, ServiceController.deleteService);
 
 export default router;
