@@ -50,7 +50,8 @@ export class ServiceService {
     if (filters.query) {
       where.OR = [
         { name: { contains: filters.query, mode: 'insensitive' } },
-        { description: { contains: filters.query, mode: 'insensitive' } }
+        { description: { contains: filters.query, mode: 'insensitive' } },
+        { provider: { name: { contains: filters.query, mode: 'insensitive' } } }
       ];
     }
 
