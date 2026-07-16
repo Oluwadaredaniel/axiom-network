@@ -37,4 +37,15 @@ export class ServiceController {
       return sendError(res, 'Failed to discover services');
     }
   }
+
+  static async getServiceDetails(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const service = await ServiceService.getServiceById(id);
+      if (!service) return sendError(res, 'Service not found', 404);
+      return sendSuccess(res, service);
+    } catch (error: any) {
+      return sendError(res, 'Failed to fetch service details');
+    }
+  }
 }
