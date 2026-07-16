@@ -44,15 +44,34 @@ model Service {
   providerId      String
   name            String
   description     String
-  category        String
+  categoryName    String
+  category        ServiceCategory  @relation(fields: [categoryName], references: [name])
   endpoint        String
   price           Float            @default(0.0) // Price in AXC
   status          String           @default("ACTIVE")
   paymentRequired Boolean          @default(true)
   rating          Float            @default(0.0)
+  usageCount      Int              @default(0)
+  analytics       ServiceAnalytics?
   receipts        PaymentReceipt[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+}
+
+model ServiceCategory {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  services Service[]
+}
+
+model ServiceAnalytics {
+  id              String  @id @default(uuid())
+  service         Service @relation(fields: [serviceId], references: [id])
+  serviceId       String  @unique
+  totalCalls      Int     @default(0)
+  successfulCalls Int     @default(0)
+  revenue         Float   @default(0.0)
+  updatedAt       DateTime @updatedAt
 }
 
 model Wallet {
