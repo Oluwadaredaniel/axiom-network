@@ -87,4 +87,13 @@ export class ServiceService {
       where: { id }
     });
   }
+
+  static async incrementUsage(id: string) {
+    return await prisma.service.update({
+      where: { id },
+      data: {
+        usageCount: { increment: 1 }
+      }
+    });
+  }
 }
