@@ -87,5 +87,9 @@ Output: `demo-engine/output/axiom-demo.mp4`
 - [ ] v2.0: Mainnet Release & Public Capability SDK
 - [ ] v2.1: Governance DAO for Registry Management
 
+## 👥 Contributors
+- **Oluwadare Daniel** - Principal Architect
+- **Axiom Labs Team** - Core Platform Engineering
+
 ---
 Built with 💚 for the future of Autonomous AI.
