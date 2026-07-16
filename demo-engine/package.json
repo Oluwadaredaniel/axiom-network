@@ -1,0 +1,21 @@
+{
+  "name": "axiom-demo-engine",
+  "version": "1.0.0",
+  "description": "Automated demo runner for Axiom",
+  "main": "scripts/run-demo.ts",
+  "scripts": {
+    "demo": "ts-node scripts/run-demo.ts",
+    "seed": "ts-node seed/demo-seed.ts"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.42.1",
+    "playwright": "^1.42.1",
+    "dotenv": "^16.4.5",
+    "axios": "^1.6.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24"
+  }
+}
