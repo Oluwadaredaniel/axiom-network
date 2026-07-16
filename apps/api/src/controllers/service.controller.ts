@@ -58,4 +58,14 @@ export class ServiceController {
       return sendError(res, 'Failed to update service');
     }
   }
+
+  static async deleteService(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await ServiceService.deleteService(id);
+      return sendSuccess(res, { message: 'Service deleted successfully' });
+    } catch (error: any) {
+      return sendError(res, 'Failed to delete service');
+    }
+  }
 }
