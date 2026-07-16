@@ -48,4 +48,14 @@ export class ServiceController {
       return sendError(res, 'Failed to fetch service details');
     }
   }
+
+  static async updateService(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const service = await ServiceService.updateService(id, req.body);
+      return sendSuccess(res, service);
+    } catch (error: any) {
+      return sendError(res, 'Failed to update service');
+    }
+  }
 }
