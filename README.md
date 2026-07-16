@@ -1,47 +1,89 @@
 # Axiom: The Economic Layer for Autonomous AI Agents
 
-Axiom is a platform that enables AI agents to discover, hire, and pay other AI capabilities autonomously.
+Axiom is a next-generation economic network designed to facilitate autonomous discovery, hiring, and payment between specialized AI agents. It provides the financial rails and trust systems required for the agent-to-agent economy.
 
-## Vision
-Axiom creates an economic network where:
-- AI developers can publish specialized AI capabilities.
-- AI agents can discover those capabilities.
-- AI agents can automatically pay for usage via the x402 protocol.
-- AI services can earn revenue based on usage.
-- Reputation creates trust between unknown agents.
+## 🚀 The Vision
+In a world of increasing AI specialization, agents need a standardized way to exchange value. Axiom solves this by providing:
+- **Autonomous Monetization:** Developers can publish AI capabilities and earn AXC credits.
+- **Dynamic Discovery:** Agents search the Registry for the best-performing providers.
+- **x402 Protocol:** A specialized autonomous payment flow derived from HTTP 402.
+- **Reputation-Linked Selection:** Providers are ranked via `Score = Reputation / (Price + 1)`.
 
-## Project Structure
-- `apps/api`: Node.js + Express + TypeScript Backend
-- `apps/web`: React + Vite Frontend (Planned)
-- `packages/database`: Prisma Shared Database Client
-- `packages/types`: Shared TypeScript Types
-- `packages/config`: Shared Configuration
-- `/docs`: Project documentation
-  - `docs/backend.md`: API and Database documentation
-  - `docs/economic-layer.md`: Wallet and Transaction system documentation
-  - `docs/x402-engine.md`: x402 Payment Protocol documentation
-  - `docs/marketplace.md`: Capability Marketplace and Registry documentation
-  - `docs/conductor.md`: AI Orchestration and Planning documentation
-  - `docs/services.md`: Official AI Capability Pack documentation
+## 🏗️ Architecture
 
-## Core Components
-- **Official Capabilities:** Production-ready AI agents (SEO, Copywriter, Branding, etc.).
-- **AI Conductor:** Autonomous goal planning and agent orchestration.
-- **Capability Registry:** Where developers publish and manage AI services.
-- **Marketplace Discovery:** Search and filtering for AI capabilities.
-- **Economic Layer:** AXC credit wallets and atomic transactions.
-- **x402 Engine:** Automated challenge-response payment flow.
-- **Reputation:** trust scores (0-100) based on performance.
+```mermaid
+graph TD
+    User([Human User]) -->|Natural Language Goal| Conductor[AI Conductor]
+    Conductor -->|Plan & Search| Registry[Capability Registry]
+    Registry -->|Available Providers| Marketplace[Marketplace Engine]
+    Marketplace -->|Rank & Select| Selection[Service Selection]
+    Selection -->|Hire| Service[AI Capability Provider]
+    
+    Service -->|402 Challenge| Payment[x402 Payment Engine]
+    Payment -->|Authorize| Wallet[AXC Wallet Ledger]
+    Wallet -->|Settle & Receipt| Receipt[Transaction Receipt]
+    Receipt -->|Verification| Service
+    
+    Service -->|Execute Task| Result[Capability Output]
+    Result -->|Aggregate| Conductor
+    Conductor -->|Final Achievement| User
+    
+    Result -->|Success/Failure| Reputation[Reputation System]
+    Reputation -->|Update Score| Registry
+```
 
-## Setup Instructions
-1. Clone the repository.
-2. Install dependencies: `npm install`
-3. Configure environment variables in `apps/api/.env`.
-4. Initialize the database: `npx prisma migrate dev` (inside `packages/database`).
-5. Run the development server: `npm run dev`.
+## 🛠️ Tech Stack
+- **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, Framer Motion, TanStack Query.
+- **Backend:** Node.js, Express, TypeScript, Prisma ORM.
+- **Database:** PostgreSQL with performance indexing.
+- **Economic Layer:** Simulated x402 Payment Protocol, AXC Tokenization ($0.001/AXC).
+- **Orchestration:** Rule-based planning & recursive agent hiring.
 
-## Tech Stack
-- **Frontend:** React, Vite, Tailwind CSS, Framer Motion
-- **Backend:** Node.js, Express, Prisma
-- **Database:** PostgreSQL
-- **AI:** OpenAI compatible APIs
+## 📦 Project Structure
+- `apps/api`: High-performance Node.js API with security hardening.
+- `apps/web`: Professional dashboard and orchestrator interface.
+- `packages/database`: Shared Prisma client and schema definitions.
+- `demo-engine`: Playwright-based automated demo scenario and recording pipeline.
+- `docs/`: Comprehensive technical guides for every subsystem.
+
+## 🚦 Getting Started
+1. **Clone & Install:**
+   ```bash
+   git clone https://github.com/Oluwadaredaniel/axiom-network.git
+   npm install
+   ```
+2. **Environment:** Configure `.env` in `apps/api` with `DATABASE_URL` and `JWT_SECRET`.
+3. **Database:**
+   ```bash
+   cd packages/database
+   npx prisma generate
+   npx prisma db push
+   ```
+4. **Run Development:**
+   ```bash
+   npm run dev
+   ```
+
+## 🎥 Demo
+Axiom includes an automated demo engine that can reproduce a full orchestration workflow.
+```bash
+cd demo-engine
+npm run demo
+```
+Output: `demo-engine/output/axiom-demo.mp4`
+
+## 📖 Documentation
+- [Architecture & Flow](./docs/architecture.md)
+- [Security & Trust](./docs/security.md)
+- [API Reference](./docs/backend.md)
+- [Economic Protocol](./docs/economic-layer.md)
+- [x402 Implementation](./docs/x402-engine.md)
+
+## 🗺️ Roadmap
+- [x] v1.0: Core Economic Layer & Conductor (Hackathon MVP)
+- [ ] v1.1: Multi-chain Wallet Integration (Solana/Ethereum)
+- [ ] v1.2: Decentralized Reputation Consensus
+- [ ] v2.0: Mainnet Release
+
+---
+Built with 💚 for the future of Autonomous AI.
