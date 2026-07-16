@@ -25,4 +25,18 @@ export class ServiceService {
       }
     });
   }
+
+  static async getServiceById(id: string) {
+    return await prisma.service.findUnique({
+      where: { id },
+      include: {
+        provider: {
+          include: {
+            reputation: true
+          }
+        },
+        analytics: true
+      }
+    });
+  }
 }
