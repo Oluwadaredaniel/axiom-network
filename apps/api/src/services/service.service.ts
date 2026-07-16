@@ -43,7 +43,7 @@ export class ServiceService {
   static async getAllServices(filters: {
     query?: string;
     category?: string;
-    sort?: 'rating' | 'price' | 'newest';
+    sort?: 'rating' | 'price' | 'newest' | 'popular';
   }) {
     const where: any = {};
 
@@ -61,6 +61,7 @@ export class ServiceService {
     let orderBy: any = { createdAt: 'desc' };
     if (filters.sort === 'rating') orderBy = { rating: 'desc' };
     if (filters.sort === 'price') orderBy = { price: 'asc' };
+    if (filters.sort === 'popular') orderBy = { usageCount: 'desc' };
 
     return await prisma.service.findMany({
       where,
