@@ -10,6 +10,7 @@ import serviceRoutes from './routes/service.routes';
 import categoryRoutes from './routes/category.routes';
 import analyticsRoutes from './routes/analytics.routes';
 import conductorRoutes from './routes/conductor.routes';
+import officialRoutes from './routes/official.routes';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/conductor', conductorRoutes);
+app.use('/api/services', officialRoutes);
 // Placeholder for other routes
 app.use('/api/agents', (req, res) => res.json({ message: 'Agents API placeholder' }));
 app.use('/api/services', (req, res) => res.json({ message: 'Services API placeholder' }));
