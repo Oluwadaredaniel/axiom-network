@@ -39,19 +39,20 @@ model Agent {
 }
 
 model Service {
-  id          String           @id @default(uuid())
-  provider    Agent            @relation(fields: [providerId], references: [id])
-  providerId  String
-  name        String
-  description String
-  category    String
-  endpoint    String
-  price       Float            @default(0.0) // Price in AXC
-  status      String           @default("ACTIVE")
-  rating      Float            @default(0.0)
-  receipts    PaymentReceipt[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  id              String           @id @default(uuid())
+  provider        Agent            @relation(fields: [providerId], references: [id])
+  providerId      String
+  name            String
+  description     String
+  category        String
+  endpoint        String
+  price           Float            @default(0.0) // Price in AXC
+  status          String           @default("ACTIVE")
+  paymentRequired Boolean          @default(true)
+  rating          Float            @default(0.0)
+  receipts        PaymentReceipt[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
 
 model Wallet {
@@ -103,6 +104,17 @@ model PaymentReceipt {
   amount        Float
   receiptHash   String
   createdAt     DateTime    @default(now())
+}
+
+model PaymentChallenge {
+  id              String   @id @default(uuid())
+  serviceId       String
+  amount          Float
+  currency        String   @default("AXC")
+  recipientWallet String
+  status          String   @default("PENDING") // PENDING, SETTLED, EXPIRED
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
 }
 
 model Reputation {
