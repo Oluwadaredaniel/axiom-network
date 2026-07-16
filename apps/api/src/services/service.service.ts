@@ -39,4 +39,39 @@ export class ServiceService {
       }
     });
   }
+
+  static async getAllServices(filters: {
+    query?: string;
+    category?: string;
+    sort?: 'rating' | 'price' | 'newest';
+  }) {
+    const where: any = {};
+
+    if (filters.query) {
+      where.OR = [
+        { name: { contains: filters.query, mode: 'insensitive' } },
+        { description: { contains: filters.query, mode: 'insensitive' } }
+      ];
+    }
+
+    if (filters.category) {
+      where.categoryName = filters.category;
+    }
+
+    let orderBy: any = { createdAt: 'desc' };
+    if (filters.sort === 'rating') orderBy = { rating: 'desc' };
+    if (filters.sort === 'price') orderBy = { price: 'asc' };
+
+    return await prisma.service.findMany({
+      where,
+      orderBy,
+      include: {
+        provider: {
+          include: {
+            reputation: true
+          }
+        }
+      }
+    });
+  }
 }
