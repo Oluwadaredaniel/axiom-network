@@ -8,6 +8,8 @@ import Wallet from './pages/Wallet'
 import DeveloperPortal from './pages/DeveloperPortal'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
+import ExecutionHistory from './pages/ExecutionHistory'
+import AdminPage from './pages/AdminPage'
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
       <Route path="/conductor" element={<Conductor />} />
       <Route path="/wallet" element={<Wallet />} />
       <Route path="/developer" element={<DeveloperPortal />} />
+      <Route path="/history" element={<ExecutionHistory />} />
+      <Route path="/admin" element={<AdminPage />} />
     </Routes>
   )
 }
