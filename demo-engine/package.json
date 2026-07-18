@@ -8,6 +8,7 @@
     "seed": "ts-node seed/demo-seed.ts"
   },
   "dependencies": {
+    "database": "*",
     "@playwright/test": "^1.42.1",
     "playwright": "^1.42.1",
     "dotenv": "^16.4.5",
