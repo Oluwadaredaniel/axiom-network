@@ -13,6 +13,7 @@ import categoryRoutes from './routes/category.routes';
 import analyticsRoutes from './routes/analytics.routes';
 import conductorRoutes from './routes/conductor.routes';
 import officialRoutes from './routes/official.routes';
+import agentRoutes from './routes/agent.routes';
 import prisma from 'database';
 
 dotenv.config();
@@ -45,6 +46,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/conductor', conductorRoutes);
 app.use('/api/services', officialRoutes);
+app.use('/api/agents', agentRoutes);
 // Placeholder for other routes
 app.use('/api/agents', (req, res) => res.json({ message: 'Agents API placeholder' }));
 app.use('/api/services', (req, res) => res.json({ message: 'Services API placeholder' }));
