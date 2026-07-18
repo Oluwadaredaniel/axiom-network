@@ -33,7 +33,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-surface border-b md:border-b-0 md:border-r border-white/5 flex flex-col sticky top-0 z-40 h-auto md:h-screen">
         <div className="p-6 flex items-center gap-3">
-          <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-glow shadow-primary/20">
+          <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-glow shadow-primary/20 transition-transform hover:rotate-6">
             <span className="text-white font-black text-xl">A</span>
           </div>
           <span className="font-display font-black text-xl tracking-tight uppercase">Axiom</span>
