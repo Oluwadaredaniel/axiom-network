@@ -3,14 +3,14 @@ import axios from 'axios';
 import {
   History,
   CheckCircle2,
+  XCircle,
   Clock,
   ChevronRight,
   Search,
   Filter,
   Zap,
   ArrowRight,
-  Database,
-  X
+  Database
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/Badge';
@@ -58,8 +58,8 @@ export default function ExecutionHistory() {
                     className="p-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-white/[0.02] transition-all cursor-pointer group relative"
                  >
                     <div className="flex items-start gap-8">
-                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all ${job.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'}`}>
-                          {job.status === 'COMPLETED' ? <CheckCircle2 size={28} /> : <X size={28} />}
+                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all ${job.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 group-hover:bg-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20 group-hover:bg-rose-500/20'}`}>
+                          {job.status === 'COMPLETED' ? <CheckCircle2 size={28} /> : <XCircle size={28} />}
                        </div>
                        <div className="space-y-1.5">
                           <h3 className="font-black text-white text-xl tracking-tight group-hover:text-primary transition-colors line-clamp-1 max-w-xl">{job.goal}</h3>
