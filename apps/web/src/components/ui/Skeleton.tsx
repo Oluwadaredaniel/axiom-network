@@ -1,3 +1,4 @@
+import React from 'react';
 import { cn } from "@/utils/cn";
 
 interface SkeletonProps {
@@ -8,7 +9,7 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        "animate-pulse rounded-md bg-surface-lighter",
+        "animate-pulse rounded-md bg-white/5",
         className
       )}
     />
@@ -22,11 +23,6 @@ export function CardSkeleton() {
       <div className="space-y-2">
         <Skeleton className="h-5 w-3/4" />
         <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-      </div>
-      <div className="pt-4 flex justify-between items-center">
-        <Skeleton className="h-4 w-20" />
-        <Skeleton className="h-4 w-12" />
       </div>
     </div>
   );

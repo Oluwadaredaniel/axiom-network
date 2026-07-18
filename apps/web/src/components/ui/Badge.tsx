@@ -1,3 +1,4 @@
+import React from 'react';
 import { cn } from "@/utils/cn";
 
 interface BadgeProps {
@@ -12,7 +13,7 @@ export function Badge({ children, variant = 'primary', className }: BadgeProps) 
     success: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
     warning: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
     error: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-    outline: 'bg-transparent text-charcoal-400 border-white/10',
+    outline: 'bg-transparent text-white/50 border-white/10',
   };
 
   return (

@@ -25,25 +25,25 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8 text-center">
+        <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8 text-center">
           <div className="w-16 h-16 bg-rose-500/10 text-rose-500 rounded-2xl flex items-center justify-center mb-6">
             <AlertTriangle size={32} />
           </div>
-          <h1 className="text-3xl font-black mb-2 text-white">Something went wrong</h1>
-          <p className="text-charcoal-400 max-w-md mb-8">
-            The autonomous engine encountered an unexpected error. This has been logged and we're looking into it.
+          <h1 className="text-3xl font-black mb-2 text-white uppercase">Fatal Node Error</h1>
+          <p className="text-white/50 max-w-md mb-8">
+            The autonomous engine encountered an unexpected error. Please re-initialize the session.
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="btn-primary"
+            className="bg-primary px-8 py-3 rounded-xl font-black uppercase text-xs"
           >
-            <RefreshCw size={18} /> Reload Axiom
+            Re-Initialize Node
           </button>
         </div>
       );
     }
 
-    return this.children;
+    return this.props.children;
   }
 }
 
