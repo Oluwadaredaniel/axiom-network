@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Send, User, Code, ShieldCheck, Loader2, Cpu } from 'lucide-react';
+import { Send, Code, ShieldCheck, Loader2, Cpu } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/utils/cn';
@@ -38,10 +38,10 @@ export default function Register() {
           <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl shadow-glow shadow-primary/20">A</div>
           <span className="font-display font-black text-xl tracking-tight uppercase">AXIOM</span>
         </Link>
-        <div className="space-y-12 my-12 lg:my-0">
+
+        <div className="space-y-12">
           <div className="space-y-4">
              <h2 className="text-4xl font-black tracking-tight leading-none">Identify your <br />Node type.</h2>
-             <p className="text-charcoal-400 font-bold text-sm">Select the primary function of your autonomous account.</p>
           </div>
           <div className="space-y-4">
             {[
@@ -52,86 +52,71 @@ export default function Register() {
                 key={r.id}
                 onClick={() => setRole(r.id as any)}
                 className={cn(
-                  "w-full p-6 rounded-[32px] border-2 text-left transition-all group relative overflow-hidden",
-                  role === r.id
-                    ? "border-primary bg-primary/5 shadow-glow shadow-primary/10"
-                    : "border-transparent bg-white/5 hover:bg-white/10"
+                  "w-full p-6 rounded-[32px] border-2 text-left transition-all",
+                  role === r.id ? "border-primary bg-primary/5" : "border-transparent bg-white/5"
                 )}
               >
                 <div className={cn(
-                  "w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-all",
-                  role === r.id ? "bg-primary text-white scale-110" : "bg-white/5 text-charcoal-500"
+                  "w-12 h-12 rounded-2xl flex items-center justify-center mb-4",
+                  role === r.id ? "bg-primary text-white" : "bg-white/5 text-charcoal-500"
                 )}>
                   <r.icon size={24} />
                 </div>
-                <h4 className={cn(
-                  "text-lg font-black tracking-tight",
-                  role === r.id ? "text-white" : "text-charcoal-400"
-                )}>{r.label}</h4>
-                <p className="text-xs font-bold text-charcoal-500 mt-1 leading-relaxed">{r.desc}</p>
+                <h4 className="text-lg font-black">{r.label}</h4>
+                <p className="text-xs text-charcoal-500 mt-1">{r.desc}</p>
               </button>
             ))}
           </div>
         </div>
-        <div className="flex items-center gap-3 text-charcoal-500 font-black text-[10px] uppercase tracking-widest">
-           <ShieldCheck size={16} className="text-emerald-500" /> Decentralized Identity Ready
+
+        <div className="flex items-center gap-3 text-charcoal-500 font-black text-[10px] uppercase">
+           <ShieldCheck size={16} className="text-emerald-500" /> Identity Ready
         </div>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-24 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-24 relative">
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md space-y-10 relative z-10"
+          className="w-full max-w-md space-y-10"
         >
           <div className="space-y-2">
-            <Badge variant="primary" className="mb-2">Network Expansion</Badge>
+            <Badge variant="primary">Network Expansion</Badge>
             <h1 className="text-4xl font-black">Register Node</h1>
-            <p className="text-charcoal-400 font-bold text-sm">Join the next generation of AI economics.</p>
           </div>
+
           <form onSubmit={handleRegister} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal-500 ml-1">Node Operator Name</label>
-              <input
-                type="text"
-                required
-                className="input-field w-full"
-                placeholder="Axiom Controller #1"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal-500 ml-1">Email Endpoint</label>
-              <input
-                type="email"
-                required
-                className="input-field w-full"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal-500 ml-1">Security Keyphrase</label>
-              <input
-                type="password"
-                required
-                className="input-field w-full"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+            <input
+              type="text"
+              required
+              className="input-field w-full"
+              placeholder="Node Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="email"
+              required
+              className="input-field w-full"
+              placeholder="Email Endpoint"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              required
+              className="input-field w-full"
+              placeholder="Security Key"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
             {error && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="p-4 bg-rose-500/10 text-rose-400 rounded-xl text-xs font-bold border border-rose-500/20"
-              >
+              <div className="p-4 bg-rose-500/10 text-rose-400 rounded-xl text-xs font-bold border border-rose-500/20">
                 {error}
-              </motion.div>
+              </div>
             )}
+
             <button
               type="submit"
               disabled={loading}
@@ -140,11 +125,6 @@ export default function Register() {
               {loading ? <Loader2 size={24} className="animate-spin" /> : <>Join Network <Send size={18} /></>}
             </button>
           </form>
-          <div className="pt-8 text-center border-t border-white/5">
-            <p className="text-charcoal-400 text-sm font-bold">
-              Already registered? <Link to="/login" className="text-primary hover:text-primary-light transition-colors">Resume Session</Link>
-            </p>
-          </div>
         </motion.div>
       </div>
     </div>

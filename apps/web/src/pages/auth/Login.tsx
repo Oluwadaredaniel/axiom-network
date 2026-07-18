@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Send, ArrowLeft, Loader2, ShieldCheck, Sparkles } from 'lucide-react';
+import { Send, Loader2, ShieldCheck, Sparkles } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '@/components/ui/Badge';
 
@@ -20,7 +20,7 @@ export default function Login() {
       const res = await axios.post('/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.data.token);
       navigate('/dashboard');
-      window.location.reload(); // Force refresh to update Layout state
+      window.location.reload();
     } catch (err: any) {
       setError(err.response?.data?.message || 'Invalid credentials');
     } finally {
@@ -30,10 +30,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Left Side: Brand Visual */}
       <div className="hidden lg:flex w-1/2 bg-surface p-16 flex-col justify-between relative overflow-hidden border-r border-white/5">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 blur-[150px] -mr-64 -mt-64 rounded-full" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-cyan/5 blur-[100px] -ml-32 -mb-32 rounded-full" />
 
         <Link to="/" className="flex items-center gap-3 relative z-10">
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-glow shadow-primary/20">
@@ -50,7 +48,7 @@ export default function Login() {
             for AI.
           </h2>
           <p className="text-charcoal-400 text-xl max-w-md font-medium leading-relaxed">
-            Authenticated nodes can execute complex multi-agent workflows and settle micro-transactions instantly.
+            Authenticated nodes can execute complex workflows and settle micro-transactions instantly.
           </p>
         </div>
 
@@ -58,26 +56,15 @@ export default function Login() {
            <div className="flex items-center gap-2 text-charcoal-500 font-bold text-xs uppercase tracking-widest">
               <ShieldCheck size={16} className="text-emerald-500" /> AES-256 Encrypted
            </div>
-           <div className="flex items-center gap-2 text-charcoal-500 font-bold text-xs uppercase tracking-widest">
-              <Sparkles size={16} className="text-primary" /> Autonomous Ready
-           </div>
         </div>
       </div>
 
-      {/* Right Side: Form */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-24 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md space-y-10"
         >
-          <div className="lg:hidden mb-12">
-             <Link to="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl shadow-glow shadow-primary/20">A</div>
-                <span className="font-display font-black text-xl tracking-tight uppercase">AXIOM</span>
-             </Link>
-          </div>
-
           <div className="space-y-2">
             <h1 className="text-4xl font-black">Welcome back</h1>
             <p className="text-charcoal-400 font-bold text-sm">Initialize your controller node to begin.</p>
@@ -97,10 +84,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center ml-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-charcoal-500">Access Key</label>
-                <a href="#" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-primary-light transition-colors">Recover</a>
-              </div>
+              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal-500 ml-1">Access Key</label>
               <input
                 type="password"
                 required
@@ -112,13 +96,9 @@ export default function Login() {
             </div>
 
             {error && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="p-4 bg-rose-500/10 text-rose-400 rounded-xl text-xs font-bold border border-rose-500/20"
-              >
+              <div className="p-4 bg-rose-500/10 text-rose-400 rounded-xl text-xs font-bold border border-rose-500/20">
                 {error}
-              </motion.div>
+              </div>
             )}
 
             <button
