@@ -14,37 +14,73 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-display tracking-tight;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer components {
   .glass {
-    @apply bg-surface/50 backdrop-blur-xl border border-white/5;
+    @apply bg-surface/60 backdrop-blur-2xl border border-white/[0.06] shadow-soft;
+  }
+
+  .glass-strong {
+    @apply bg-surface/80 backdrop-blur-3xl border border-white/[0.08] shadow-premium;
   }
 
   .premium-card {
-    @apply glass rounded-2xl p-6 transition-all duration-300 hover:border-white/10 hover:bg-surface/70 shadow-premium;
+    @apply bg-surface/50 rounded-[2rem] p-8 border border-white/[0.04] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-white/10 hover:bg-surface/70 shadow-premium shadow-inner-glow;
+  }
+
+  .premium-card-strong {
+    @apply bg-surface/70 backdrop-blur-xl rounded-[2rem] p-8 border border-white/[0.06] shadow-premium shadow-inner-glow;
   }
 
   .input-field {
-    @apply bg-surface-light border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all placeholder:text-charcoal-500;
+    @apply bg-surface/60 border border-white/[0.06] rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all placeholder:text-stone-600 font-sans font-medium;
   }
 
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2 shadow-glow shadow-primary/20;
+    @apply bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-2xl font-display font-bold text-sm transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.97] hover:scale-[1.02] flex items-center justify-center gap-3 shadow-glow shadow-primary/20;
   }
 
   .btn-secondary {
-    @apply bg-white/5 hover:bg-white/10 border border-white/5 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2;
+    @apply bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-white px-8 py-3 rounded-2xl font-display font-bold text-sm transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.97] flex items-center justify-center gap-3;
+  }
+
+  .btn-ghost {
+    @apply text-stone-400 hover:text-white transition-colors duration-300 font-display font-bold text-sm;
   }
 
   .text-muted {
-    @apply text-charcoal-400;
+    @apply text-stone-500;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-[10px] font-display font-bold uppercase tracking-[0.25em] text-stone-400;
+  }
+
+  .nav-link {
+    @apply text-[11px] font-display font-bold uppercase tracking-[0.2em] text-stone-400 hover:text-white transition-colors duration-300;
+  }
+
+  .double-bezel {
+    @apply bg-white/[0.03] rounded-[2.5rem] p-[1px] shadow-inner-glow;
+  }
+
+  .double-bezel-inner {
+    @apply bg-background rounded-[calc(2.5rem-1px)] shadow-premium;
+  }
+
+  .badge-primary {
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[11px] font-display font-bold uppercase tracking-[0.2em] text-primary;
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -52,9 +88,9 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-surface-lighter rounded-full border-2 border-background;
+  @apply bg-stone-800 rounded-full border-2 border-background;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-charcoal-700;
+  @apply bg-stone-700;
 }
