@@ -2,11 +2,20 @@
   "name": "axiom",
   "private": true,
   "packageManager": "npm@10.2.4",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
     "test": "turbo run test",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "seed": "npm run seed:demo -w apps/api",
+    "db:push": "npx -w packages/database prisma db push",
+    "db:generate": "npx -w packages/database prisma generate",
+    "db:studio": "npx -w packages/database prisma studio",
+    "setup": "npm install && npm run db:generate && npm run db:push && npm run seed",
+    "clean": "turbo run clean"
   },
   "workspaces": [
     "apps/*",
