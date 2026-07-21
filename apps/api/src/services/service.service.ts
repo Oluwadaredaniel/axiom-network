@@ -44,6 +44,7 @@ export class ServiceService {
     query?: string;
     category?: string;
     sort?: 'rating' | 'price' | 'newest' | 'popular';
+    providerId?: string;
   }) {
     const where: any = {};
 
@@ -57,6 +58,10 @@ export class ServiceService {
 
     if (filters.category) {
       where.categoryName = filters.category;
+    }
+
+    if (filters.providerId) {
+      where.providerId = filters.providerId;
     }
 
     let orderBy: any = { createdAt: 'desc' };

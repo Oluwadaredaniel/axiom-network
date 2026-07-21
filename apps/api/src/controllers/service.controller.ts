@@ -26,11 +26,12 @@ export class ServiceController {
 
   static async discoverServices(req: Request, res: Response) {
     try {
-      const { q, category, sort } = req.query;
+      const { q, category, sort, provider } = req.query;
       const services = await ServiceService.getAllServices({
         query: q as string,
         category: category as string,
-        sort: sort as any
+        sort: sort as any,
+        providerId: provider as string
       });
       return sendSuccess(res, services);
     } catch (error: any) {
