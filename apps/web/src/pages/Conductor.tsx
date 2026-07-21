@@ -1,21 +1,18 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Send,
-  Play,
-  CheckCircle2,
   Loader2,
-  Sparkles,
   Receipt,
   Wallet,
-  Activity,
-  Cpu,
   ArrowRight,
   ShieldCheck,
   Brain,
-  Search,
+  Database,
   Zap,
-  Check
+  Check,
+  AlertTriangle,
+  RefreshCw
 } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '@/components/ui/Badge';
@@ -34,36 +31,79 @@ interface ExecutionResult {
   executionId: string;
 }
 
+const ANIMATION_STEPS = [
+  { at: 1500, label: 'Scanning capability registry for optimal providers...' },
+  { at: 3000, label: 'Evaluating reputation and real-time pricing...' },
+  { at: 4500, label: 'Settling x402 payment challenges autonomously...' },
+  { at: 6000, label: 'Executing capabilities and aggregating outputs...' },
+  { at: 7500, label: 'Finalizing on-ledger settlement...' },
+];
+
 export default function Conductor() {
   const [goal, setGoal] = useState('');
   const [status, setStatus] = useState<'idle' | 'executing' | 'completed' | 'failed'>('idle');
   const [execution, setExecution] = useState<ExecutionResult | null>(null);
   const [steps, setSteps] = useState<string[]>([]);
+  const [error, setError] = useState('');
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+      timeoutsRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
+  const clearTimeouts = () => {
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
+  };
+
+  const scheduleStep = useCallback((delay: number, label: string) => {
+    const id = setTimeout(() => {
+      if (mountedRef.current) setSteps(s => [...s, label]);
+    }, delay);
+    timeoutsRef.current.push(id);
+  }, []);
 
   const runExecution = async () => {
     if (!goal) return;
     setStatus('executing');
     setExecution(null);
+    setError('');
     setSteps(['Initializing neural orchestrator...', 'Decomposing complex goal into capabilities...']);
 
+    ANIMATION_STEPS.forEach(s => scheduleStep(s.at, s.label));
+
     try {
-      setTimeout(() => setSteps(s => [...s, 'Scanning capability registry for optimal providers...']), 2000);
-      setTimeout(() => setSteps(s => [...s, 'Evaluating reputation and real-time pricing...']), 4000);
-      setTimeout(() => setSteps(s => [...s, 'Settling x402 payment challenges autonomously...']), 6000);
-      setTimeout(() => setSteps(s => [...s, 'Executing capabilities and aggregating outputs...']), 8000);
-
       const res = await axios.post('/api/conductor/execute', { goal });
+      if (!mountedRef.current) return;
 
+      scheduleStep(9000, 'Execution successful. Achievement delivered.');
       setTimeout(() => {
-        setExecution(res.data.data);
-        setStatus('completed');
-        setSteps(s => [...s, 'Execution successful. Achievement delivered.']);
+        if (mountedRef.current) {
+          setExecution(res.data.data);
+          setStatus('completed');
+        }
       }, 10000);
-
-    } catch (error) {
-      setStatus('failed');
-      setSteps(s => [...s, 'Autonomous execution failed. Check balance or logs.']);
+    } catch (err: any) {
+      if (!mountedRef.current) return;
+      clearTimeouts();
+      setError(err.response?.data?.message || 'Execution failed. Insufficient balance or service unavailable.');
+      setSteps(s => [...s, 'Autonomous execution failed. Initiating recovery...']);
+      setTimeout(() => {
+        if (mountedRef.current) setStatus('failed');
+      }, 1500);
     }
+  };
+
+  const reset = () => {
+    clearTimeouts();
+    setStatus('idle');
+    setExecution(null);
+    setSteps([]);
+    setError('');
   };
 
   return (
@@ -211,7 +251,39 @@ export default function Conductor() {
             </motion.div>
           )}
 
-          {status === 'completed' && execution && (
+            {status === 'failed' && (
+              <motion.div
+                key="failed"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 flex flex-col items-center justify-center text-center space-y-10 py-20"
+              >
+                <div className="w-28 h-28 bg-rose-500/10 rounded-[32px] flex items-center justify-center border border-rose-500/20">
+                  <AlertTriangle size={56} className="text-rose-400" />
+                </div>
+                <div className="space-y-3">
+                  <h2 className="text-5xl font-black tracking-tighter uppercase">Mission Failed</h2>
+                  <p className="text-charcoal-400 font-bold text-xl max-w-lg mx-auto leading-relaxed">{error}</p>
+                </div>
+                <div className="flex items-center gap-6">
+                  <button
+                    onClick={runExecution}
+                    className="bg-white text-black h-16 px-10 rounded-[28px] font-black text-sm uppercase tracking-widest flex items-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-glow shadow-white/20"
+                  >
+                    <RefreshCw size={20} strokeWidth={3} /> Retry Mission
+                  </button>
+                  <button
+                    onClick={reset}
+                    className="btn-secondary h-16 px-10 rounded-[28px] text-sm font-black uppercase tracking-widest"
+                  >
+                    New Goal
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {status === 'completed' && execution && (
             <motion.div
               key="completed"
               initial={{ opacity: 0, y: 30 }}
@@ -317,7 +389,7 @@ export default function Conductor() {
                       All capabilities were secured via x402 settlement. Receipts are cryptographically verified and recorded on-ledger.
                     </p>
                     <button
-                      onClick={() => setStatus('idle')}
+                      onClick={reset}
                       className="w-full bg-white text-black h-14 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-50 transition-all relative z-10 active:scale-95"
                     >
                       New Mission <ArrowRight size={16} className="ml-2" />
