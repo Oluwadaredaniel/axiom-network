@@ -57,10 +57,16 @@ export default function Wallet() {
     enabled: !!agentId
   });
 
-  const transactions: Transaction[] = [
-    { id: 'tx_8291_ax', amount: 5.5, type: 'SERVICE_PAYMENT', status: 'SUCCESS', createdAt: new Date().toISOString(), senderWalletId: 'w1' },
-    { id: 'tx_8290_ax', amount: 1000, type: 'TOP_UP', status: 'SUCCESS', createdAt: new Date(Date.now() - 86400000).toISOString(), senderWalletId: 'w1' },
-  ];
+  const { data: transactions = [], isLoading: txLoading } = useQuery({
+    queryKey: ['transactions', agentId],
+    queryFn: async () => {
+      if (!agentId) return [];
+      const res = await axios.get(`/api/transactions/${agentId}`);
+      return res.data.data || [];
+    },
+    enabled: !!agentId,
+    staleTime: 1000 * 60,
+  });
 
   const topupMutation = useMutation({
     mutationFn: async (amount: number) => {
@@ -159,9 +165,24 @@ export default function Wallet() {
             </div>
 
             <div className="premium-card bg-surface/30 rounded-[48px] p-0 overflow-hidden border-white/[0.03]">
-               <div className="divide-y divide-white/[0.05]">
-                  {transactions.map((tx, i) => (
-                    <motion.div
+              {txLoading ? (
+                <div className="p-10 space-y-4">
+                  {Array(3).fill(0).map((_, i) => <div key={i} className="h-28 w-full bg-white/5 rounded-3xl animate-pulse" />)}
+                </div>
+              ) : transactions.length === 0 ? (
+                <div className="p-24 text-center space-y-6">
+                  <div className="w-20 h-20 bg-background border border-white/5 rounded-[32px] flex items-center justify-center mx-auto text-charcoal-700 shadow-inner">
+                     <Database size={40} />
+                  </div>
+                  <div className="space-y-1">
+                     <h4 className="font-black text-xl uppercase tracking-tighter text-white">No Activity Yet</h4>
+                     <p className="text-charcoal-500 font-medium text-sm max-w-xs mx-auto">Complete a mission or top up your wallet to see transactions.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="divide-y divide-white/[0.05]">
+                   {transactions.map((tx: Transaction, i: number) => (
+                     <motion.div
                       key={tx.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -204,13 +225,14 @@ export default function Wallet() {
                          </div>
                       </div>
                     </motion.div>
-                  ))}
-               </div>
+                   ))}
+                </div>
+              )}
             </div>
-          </div>
-        </div>
+           </div>
+         </div>
 
-        {/* Sidebar: Financial Tools */}
+         {/* Sidebar: Financial Tools */}
         <div className="space-y-10">
           <div className="premium-card bg-surface/50 rounded-[50px] p-12 space-y-10 border-white/[0.05]">
             <div className="space-y-2">

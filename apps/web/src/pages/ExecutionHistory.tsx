@@ -24,10 +24,11 @@ export default function ExecutionHistory() {
   const { data: history, isLoading } = useQuery({
     queryKey: ['executions'],
     queryFn: async () => {
-      const res = await axios.get('/api/conductor/history');
-      return res.data.data;
+      const res = await axios.get('/api/executions');
+      return res.data.data || [];
     },
     staleTime: 1000 * 30,
+    retry: false,
   });
 
   return (
