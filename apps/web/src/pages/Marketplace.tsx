@@ -11,7 +11,10 @@ import {
   TrendingUp,
   ArrowRight,
   Sparkles,
-  Command
+  Command,
+  Cpu,
+  Globe,
+  Database
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CardSkeleton } from '@/components/ui/Skeleton';
@@ -55,51 +58,49 @@ export default function Marketplace() {
   const categories = ['All', 'Development', 'Marketing', 'Design', 'Research', 'Writing'];
 
   return (
-    <div className="space-y-12">
-      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Badge variant="primary">Registry</Badge>
-            <div className="h-1 w-1 bg-charcoal-600 rounded-full" />
-            <span className="text-xs font-bold text-charcoal-500 uppercase tracking-widest">v1.2.0</span>
+    <div className="space-y-12 pb-20">
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <Badge variant="primary" className="rounded-md">Global Registry</Badge>
+            <div className="h-4 w-px bg-white/10" />
+            <span className="text-[10px] font-black text-charcoal-500 uppercase tracking-widest">Available Nodes: {services?.length || 0}</span>
           </div>
-          <h1 className="text-4xl font-black mb-2">Capability Marketplace</h1>
-          <p className="text-charcoal-400 font-bold text-sm">Discover and hire specialized AI agents autonomously.</p>
+          <h1 className="text-6xl font-black tracking-tighter leading-none">Capability <br />Marketplace</h1>
+          <p className="text-charcoal-400 font-bold text-lg max-w-xl">Discover and hire specialized AI agents autonomously via the x402 economic protocol.</p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          <div className="relative group w-full sm:w-72">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-charcoal-500 group-focus-within:text-primary transition-colors">
-              <Search size={18} />
+          <div className="relative group w-full sm:w-80">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-charcoal-500 group-focus-within:text-primary transition-colors">
+              <Search size={20} />
             </div>
             <input
               type="text"
-              placeholder="Search capabilities..."
-              className="input-field w-full pl-12 pr-12"
+              placeholder="Search registry..."
+              className="input-field w-full pl-14 h-14 text-sm font-bold bg-surface/50 rounded-2xl border-white/[0.05] focus:border-primary/50"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[10px] text-charcoal-500 font-bold">
-              <Command size={10} /> K
-            </div>
           </div>
-          <button className="btn-secondary group">
-            <Filter size={18} className="text-charcoal-400 group-hover:text-white transition-colors" />
-            Filters
+          <button className="btn-secondary h-14 px-8 rounded-2xl bg-white/5 border-white/[0.05] group">
+            <Filter size={20} className="text-charcoal-400 group-hover:text-white transition-colors" />
+            <span className="text-xs uppercase tracking-widest font-black ml-3">Filters</span>
           </button>
         </div>
       </header>
 
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-hide border-b border-white/5">
+      {/* Categories Bar */}
+      <div className="flex items-center gap-3 overflow-x-auto pb-6 scrollbar-hide border-b border-white/[0.03]">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setCategory(cat)}
             className={cn(
-              "px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap border",
+              "px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap border",
               category === cat
-                ? "bg-white text-background border-white shadow-glow shadow-white/10"
-                : "bg-surface-light text-charcoal-400 border-white/5 hover:border-white/10 hover:text-white"
+                ? "bg-white text-black border-white shadow-glow shadow-white/10"
+                : "bg-surface-light text-charcoal-400 border-white/[0.05] hover:border-white/20 hover:text-white"
             )}
           >
             {cat}
@@ -114,16 +115,16 @@ export default function Marketplace() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {Array(6).fill(0).map((_, i) => <CardSkeleton key={i} />)}
+            {Array(6).fill(0).map((_, i) => <div key={i} className="h-80 bg-surface/30 rounded-[40px] animate-pulse border border-white/5" />)}
           </motion.div>
         ) : (
           <motion.div
             key="content"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {services?.map((service, i) => (
               <Link to={`/marketplace/${service.id}`} key={service.id}>
@@ -131,40 +132,50 @@ export default function Marketplace() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="premium-card group relative h-full flex flex-col"
+                  whileHover={{ y: -5 }}
+                  className="premium-card bg-surface/50 rounded-[40px] p-10 group relative flex flex-col h-full border-white/[0.05] hover:border-primary/40 transition-all shadow-premium"
                 >
-                  <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                     <ArrowRight size={20} className="text-primary" />
+                  <div className="absolute top-8 right-8 w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all group-hover:bg-primary/20">
+                     <ArrowRight size={24} className="text-primary" />
                   </div>
 
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="w-14 h-14 bg-surface-lighter rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-primary/50 transition-colors shadow-inner">
-                      {service.categoryName === 'Development' && <Zap size={28} className="text-primary" />}
-                      {service.categoryName === 'Marketing' && <TrendingUp size={28} className="text-emerald-400" />}
-                      {service.categoryName === 'Research' && <Shield size={28} className="text-amber-400" />}
-                      {!['Development', 'Marketing', 'Research'].includes(service.categoryName) && <Sparkles size={28} className="text-purple-400" />}
+                  <div className="mb-10">
+                    <div className="w-16 h-16 bg-background rounded-[24px] flex items-center justify-center border border-white/[0.05] shadow-inner mb-6 transition-all group-hover:scale-110 group-hover:rotate-3">
+                      {service.categoryName === 'Development' && <Zap size={32} className="text-primary" />}
+                      {service.categoryName === 'Marketing' && <TrendingUp size={32} className="text-emerald-400" />}
+                      {service.categoryName === 'Research' && <Shield size={32} className="text-amber-400" />}
+                      {!['Development', 'Marketing', 'Research'].includes(service.categoryName) && <Sparkles size={32} className="text-purple-400" />}
                     </div>
-                    <div className="text-right">
-                       <span className="text-2xl font-black text-white">{service.price}</span>
-                       <span className="text-[10px] font-black text-charcoal-500 uppercase tracking-tighter block">AXC / Call</span>
+
+                    <div className="space-y-3">
+                       <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{service.categoryName}</span>
+                          <div className="h-1 w-1 bg-charcoal-700 rounded-full" />
+                          <span className="text-[10px] font-black text-charcoal-500 uppercase tracking-[0.2em]">Active Node</span>
+                       </div>
+                       <h3 className="text-3xl font-black tracking-tight text-white group-hover:text-primary transition-colors leading-none">{service.name}</h3>
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{service.name}</h3>
-                  <p className="text-charcoal-400 text-sm line-clamp-3 mb-8 font-medium leading-relaxed flex-1">
+                  <p className="text-charcoal-400 text-base font-bold line-clamp-3 mb-10 leading-relaxed flex-1 italic">
                     {service.description}
                   </p>
 
-                  <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-surface-lighter rounded-md border border-white/10 flex items-center justify-center">
-                         <span className="text-[10px] font-black">{service.provider.name.charAt(0)}</span>
-                      </div>
-                      <span className="text-xs font-black text-charcoal-300 uppercase tracking-tighter">{service.provider.name}</span>
+                  <div className="flex items-center justify-between pt-8 border-t border-white/[0.05]">
+                    <div className="space-y-1">
+                       <span className="text-[9px] font-black text-charcoal-600 uppercase tracking-widest block">Neural Trust</span>
+                       <div className="flex items-center gap-2">
+                          <Star size={14} className="text-amber-400 fill-amber-400" />
+                          <span className="text-sm font-black text-white">{service.provider.reputation.score}/100</span>
+                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <Star size={14} className="text-amber-400 fill-amber-400" />
-                      <span className="text-xs font-black text-white">{service.provider.reputation.score}/100</span>
+
+                    <div className="text-right space-y-1">
+                       <span className="text-[9px] font-black text-charcoal-600 uppercase tracking-widest block">Cost / Call</span>
+                       <div className="flex items-baseline gap-1.5">
+                          <span className="text-2xl font-black text-white">{service.price}</span>
+                          <span className="text-[10px] font-black text-primary italic font-display">AXC</span>
+                       </div>
                     </div>
                   </div>
                 </motion.div>

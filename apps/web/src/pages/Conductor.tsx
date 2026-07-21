@@ -11,7 +11,11 @@ import {
   Activity,
   Cpu,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Brain,
+  Search,
+  Zap,
+  Check
 } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '@/components/ui/Badge';
@@ -63,24 +67,29 @@ export default function Conductor() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Badge variant="success">Orchestrator v2.0</Badge>
-            <div className="h-1 w-1 bg-charcoal-600 rounded-full" />
-            <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Autonomous Mode Active</span>
+    <div className="max-w-6xl mx-auto space-y-12 pb-20">
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <Badge variant="success" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Production Ready</Badge>
+            <div className="h-4 w-px bg-white/10" />
+            <span className="text-[10px] font-black text-charcoal-500 uppercase tracking-widest">Protocol: Axiom v1.2</span>
           </div>
-          <h1 className="text-4xl font-black mb-1">Axiom Conductor</h1>
-          <p className="text-charcoal-400 font-bold text-sm">Coordinate multi-agent workflows with a single prompt.</p>
+          <h1 className="text-6xl font-black tracking-tighter leading-none">Neural <br />Conductor</h1>
+          <p className="text-charcoal-400 font-bold text-lg max-w-xl leading-relaxed">Coordinate multi-agent workflows with a single prompt. Axiom plans, hires, and pays specialized AI autonomously.</p>
         </div>
-        <div className="flex items-center gap-3 px-4 py-2 bg-surface-light rounded-xl border border-white/5">
-           <Cpu size={18} className="text-primary animate-pulse" />
-           <span className="text-xs font-black text-charcoal-300 uppercase tracking-tighter">Core Latency: 42ms</span>
+        <div className="hidden lg:flex items-center gap-4 p-6 bg-surface/50 rounded-[32px] border border-white/[0.05] shadow-inner">
+           <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Brain size={24} className="text-primary animate-pulse" />
+           </div>
+           <div className="space-y-0.5">
+              <p className="text-[10px] font-black text-charcoal-500 uppercase tracking-widest">Network Load</p>
+              <p className="text-sm font-black text-white">42.8 TFLOPS</p>
+           </div>
         </div>
       </header>
 
-      <main className="min-h-[500px] flex flex-col">
+      <main className="min-h-[600px] flex flex-col">
         <AnimatePresence mode="wait">
           {status === 'idle' && (
             <motion.div
@@ -88,47 +97,57 @@ export default function Conductor() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
-              className="flex-1 flex flex-col items-center justify-center text-center space-y-10 py-20"
+              className="flex-1 flex flex-col items-center justify-center text-center space-y-12 py-20 relative overflow-hidden rounded-[60px] bg-surface/20 border border-white/[0.02]"
             >
-              <div className="relative">
-                 <div className="absolute inset-0 bg-primary/20 blur-[100px] rounded-full" />
-                 <div className="w-24 h-24 bg-surface-light text-primary rounded-[32px] flex items-center justify-center border border-white/10 shadow-glow shadow-primary/10 relative z-10">
-                   <Sparkles size={48} />
-                 </div>
-              </div>
+              <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full" />
 
-              <div className="space-y-4">
-                <h2 className="text-5xl font-black tracking-tight">How can Axiom assist today?</h2>
-                <p className="text-charcoal-400 font-bold text-xl max-w-xl mx-auto leading-relaxed">
-                  Provide a high-level goal. The system will hire, pay, and execute specialized AI to complete it.
+              <div className="space-y-6 relative z-10">
+                <h2 className="text-6xl font-black tracking-tighter text-white">Define your goal.</h2>
+                <p className="text-charcoal-500 font-bold text-xl max-w-lg mx-auto leading-relaxed">
+                  Axiom will build a dynamic agent network to execute your request in real-time.
                 </p>
               </div>
 
-              <div className="w-full max-w-3xl relative group">
-                <textarea
-                  placeholder="e.g. Build me a high-conversion landing page for my AI coffee startup, including branding ideas and SEO analysis."
-                  className="w-full bg-surface/50 border-2 border-white/5 rounded-[32px] p-8 pb-20 h-48 text-xl font-medium focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all resize-none shadow-premium placeholder:text-charcoal-600"
-                  value={goal}
-                  onChange={(e) => setGoal(e.target.value)}
-                />
-                <div className="absolute right-6 bottom-6 flex items-center gap-4">
-                   <div className="text-[10px] font-black text-charcoal-500 uppercase tracking-widest hidden sm:block">Press CMD + Enter to execute</div>
-                   <button
-                     onClick={runExecution}
-                     disabled={!goal}
-                     className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-2xl font-black text-lg flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-glow shadow-primary/30 disabled:opacity-50 disabled:grayscale disabled:scale-100"
-                   >
-                     Initiate <Send size={22} />
-                   </button>
+              <div className="w-full max-w-3xl relative group z-10">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent-cyan rounded-[42px] blur opacity-20 group-focus-within:opacity-40 transition-all duration-500" />
+                <div className="relative bg-background border border-white/[0.08] rounded-[40px] shadow-premium p-10 group-focus-within:border-primary/50 transition-all">
+                   <textarea
+                    placeholder="e.g. Build me a premium landing page for my AI coffee brand. Include branding ideas, high-conversion copy, and full SEO analysis."
+                    className="w-full bg-transparent text-2xl font-bold focus:outline-none h-48 resize-none placeholder:text-charcoal-800 text-white tracking-tight"
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
+                    onKeyDown={(e) => {
+                       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) runExecution();
+                    }}
+                  />
+                  <div className="flex items-center justify-between mt-6 pt-6 border-t border-white/[0.05]">
+                     <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                           <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                           <span className="text-[10px] font-black text-charcoal-500 uppercase tracking-widest">x402 Autopay ON</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <div className="w-2 h-2 bg-primary rounded-full" />
+                           <span className="text-[10px] font-black text-charcoal-500 uppercase tracking-widest">Global Registry</span>
+                        </div>
+                     </div>
+                     <button
+                       onClick={runExecution}
+                       disabled={!goal}
+                       className="bg-white text-black h-16 px-10 rounded-[20px] font-black text-lg flex items-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-glow shadow-white/20 disabled:opacity-20 disabled:grayscale"
+                     >
+                       Initiate Mission <Send size={24} strokeWidth={3} />
+                     </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-3">
-                {['Security Audit', 'Market Analysis', 'Branding Package', 'Full App Copy'].map(tag => (
+              <div className="flex flex-wrap justify-center gap-4 relative z-10">
+                {['Security Audit', 'Market Analysis', 'Brand Package', 'SEO Optimization'].map(tag => (
                   <button
                     key={tag}
                     onClick={() => setGoal(prev => prev ? prev + ' ' + tag : tag)}
-                    className="px-5 py-2.5 bg-surface-light hover:bg-surface-lighter rounded-xl text-xs font-black text-charcoal-400 hover:text-white transition-all border border-white/5"
+                    className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-[11px] font-black text-charcoal-400 hover:text-white transition-all border border-white/[0.05] uppercase tracking-widest"
                   >
                     + {tag}
                   </button>
@@ -143,43 +162,46 @@ export default function Conductor() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="space-y-12 py-10 flex-1 flex flex-col"
+              className="space-y-16 py-10 flex-1 flex flex-col items-center"
             >
-              <div className="flex flex-col items-center justify-center text-center space-y-6">
+              <div className="flex flex-col items-center justify-center text-center space-y-8">
                 <div className="relative">
-                   <div className="w-32 h-32 border-4 border-white/5 border-t-primary rounded-full animate-spin" />
+                   <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full animate-pulse" />
+                   <div className="w-40 h-40 border-[6px] border-white/5 border-t-primary rounded-full animate-spin duration-[2000ms]" />
                    <div className="absolute inset-0 flex items-center justify-center">
-                     <Cpu size={40} className="text-primary animate-pulse" />
+                     <Brain size={60} className="text-primary animate-pulse" />
                    </div>
                 </div>
-                <div className="space-y-2">
-                   <h2 className="text-3xl font-black">Orchestrating Autonomous Loop...</h2>
-                   <p className="text-primary font-mono text-sm tracking-wider uppercase">Goal: "{goal}"</p>
+                <div className="space-y-3">
+                   <h2 className="text-5xl font-black tracking-tighter uppercase">Orchestrating Workflow</h2>
+                   <div className="flex items-center justify-center gap-4 px-6 py-2 bg-primary/10 rounded-2xl border border-primary/20">
+                      <span className="text-xs font-mono text-primary font-bold tracking-widest uppercase truncate max-w-md">Goal: "{goal}"</span>
+                   </div>
                 </div>
               </div>
 
-              <div className="max-w-2xl mx-auto w-full space-y-4">
+              <div className="max-w-2xl mx-auto w-full space-y-6">
                 {steps.map((step, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
                     className={cn(
-                      "flex items-center gap-5 p-5 rounded-2xl border transition-all",
+                      "flex items-center gap-6 p-6 rounded-[32px] border transition-all duration-500",
                       i === steps.length - 1
-                        ? "bg-primary/10 border-primary/30 shadow-glow shadow-primary/5"
-                        : "bg-surface-light/50 border-white/5 opacity-60"
+                        ? "bg-primary/5 border-primary/40 shadow-glow shadow-primary/5 scale-105"
+                        : "bg-surface/30 border-white/5 opacity-40 grayscale"
                     )}
                   >
                     <div className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center",
+                      "w-14 h-14 rounded-[20px] flex items-center justify-center transition-all shadow-inner",
                       i === steps.length - 1 ? "bg-primary text-white" : "bg-emerald-500/20 text-emerald-400"
                     )}>
-                      {i === steps.length - 1 ? <Loader2 size={20} className="animate-spin" /> : <CheckCircle2 size={20} />}
+                      {i === steps.length - 1 ? <Loader2 size={24} className="animate-spin" strokeWidth={3} /> : <Check size={28} strokeWidth={4} />}
                     </div>
                     <span className={cn(
-                      "text-sm font-bold tracking-tight",
-                      i === steps.length - 1 ? "text-white" : "text-charcoal-400"
+                      "text-lg font-black tracking-tight",
+                      i === steps.length - 1 ? "text-white" : "text-charcoal-500"
                     )}>
                       {step}
                     </span>
@@ -192,86 +214,115 @@ export default function Conductor() {
           {status === 'completed' && execution && (
             <motion.div
               key="completed"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-10 flex-1"
+              className="space-y-12 flex-1"
             >
-              <div className="glass p-10 rounded-[40px] border-emerald-500/20 shadow-glow shadow-emerald-500/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[100px] -mr-32 -mt-32" />
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10">
-                  <div>
-                    <h2 className="text-4xl font-black text-emerald-400 mb-2">Goal Achieved</h2>
-                    <p className="text-white/80 font-bold text-lg">{execution.summary}</p>
+              <div className="bg-surface/40 backdrop-blur-3xl p-12 rounded-[60px] border border-emerald-500/20 shadow-glow shadow-emerald-500/10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 blur-[120px] -mr-40 -mt-40 animate-pulse" />
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10 relative z-10">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                       <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-black">
+                          <Check size={24} strokeWidth={4} />
+                       </div>
+                       <h2 className="text-5xl font-black text-white tracking-tighter">Mission Success</h2>
+                    </div>
+                    <p className="text-emerald-400/80 font-bold text-2xl max-w-2xl leading-relaxed italic">{execution.summary}</p>
                   </div>
-                  <div className="bg-background/80 p-6 rounded-[32px] border border-white/10 flex flex-col items-center min-w-[200px] shadow-premium">
-                    <span className="text-[10px] font-black text-charcoal-500 uppercase tracking-widest mb-1">Settlement Total</span>
-                    <span className="text-4xl font-black text-white">{execution.cost} <span className="text-primary italic text-2xl">AXC</span></span>
+                  <div className="bg-black/60 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 flex flex-col items-center min-w-[260px] shadow-premium group hover:border-primary/50 transition-colors">
+                    <span className="text-[11px] font-black text-charcoal-500 uppercase tracking-[0.3em] mb-3">Economic Settlement</span>
+                    <div className="flex items-baseline gap-3">
+                       <span className="text-6xl font-black text-white group-hover:text-primary transition-colors">{execution.cost}</span>
+                       <span className="text-2xl font-bold text-primary italic font-display uppercase tracking-tight">AXC</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-6">
-                  <div className="premium-card space-y-8 min-h-[500px]">
-                    <div className="flex items-center gap-3 mb-4">
-                       <CheckCircle2 size={24} className="text-primary" />
-                       <h3 className="text-xl font-black">Aggregated Output Feed</h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                {/* Achievement Output */}
+                <div className="lg:col-span-2 space-y-8">
+                  <div className="premium-card bg-surface/30 rounded-[50px] p-12 space-y-12 min-h-[600px] border-white/[0.04]">
+                    <div className="flex items-center justify-between mb-4">
+                       <div className="flex items-center gap-4">
+                          <Badge variant="primary" className="h-8 px-4">Neural Output</Badge>
+                          <h3 className="text-2xl font-black uppercase tracking-tighter">Aggregated Intelligence</h3>
+                       </div>
+                       <button className="p-3 bg-white/5 rounded-xl border border-white/10 text-charcoal-400 hover:text-white transition-all">
+                          <Receipt size={20} />
+                       </button>
                     </div>
-                    <div className="space-y-8">
+                    <div className="space-y-10">
                       {execution.result.map((res, i) => (
-                        <div key={i} className="group relative">
-                           <div className="absolute -left-6 top-0 bottom-0 w-1 bg-white/5 group-hover:bg-primary/50 transition-colors rounded-full" />
-                           <div className="bg-surface-light p-8 rounded-[32px] border border-white/5 group-hover:border-white/10 transition-all shadow-inner">
-                              <p className="text-white/90 font-medium leading-relaxed text-lg italic whitespace-pre-line">
+                        <motion.div
+                           key={i}
+                           initial={{ opacity: 0, x: -20 }}
+                           animate={{ opacity: 1, x: 0 }}
+                           transition={{ delay: i * 0.2 }}
+                           className="group relative"
+                        >
+                           <div className="absolute -left-12 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/50 to-transparent group-hover:from-primary transition-colors rounded-full" />
+                           <div className="bg-background/80 p-10 rounded-[40px] border border-white/[0.03] group-hover:border-white/10 group-hover:bg-background transition-all shadow-inner relative overflow-hidden">
+                              <div className="absolute top-0 right-0 p-8 text-primary/5 group-hover:text-primary/10 transition-colors">
+                                 <Zap size={80} fill="currentColor" />
+                              </div>
+                              <p className="text-white/90 font-medium leading-relaxed text-xl relative z-10 whitespace-pre-line">
                                 {res}
                               </p>
                            </div>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="premium-card space-y-6">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-charcoal-500 flex items-center gap-2">
-                       <Receipt size={14} /> Settlement Receipts
+                {/* Economic Sidebar */}
+                <div className="space-y-8">
+                  <div className="premium-card bg-surface/50 rounded-[40px] p-10 space-y-8 border-white/[0.05]">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-charcoal-500 flex items-center gap-3">
+                       <Database size={16} className="text-primary" /> Autonomous Ledger
                     </h3>
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       {execution.payments.map((p, i) => (
-                        <div key={i} className="bg-surface-light/50 p-4 rounded-2xl border border-white/5 space-y-3 group hover:border-primary/20 transition-all">
+                        <div key={i} className="space-y-3 group">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-black text-white">{p.service}</span>
-                            <span className="text-xs font-black text-primary">{p.cost} AXC</span>
+                            <span className="text-sm font-black text-white group-hover:text-primary transition-colors">{p.service}</span>
+                            <span className="text-sm font-black text-primary">{p.cost} AXC</span>
                           </div>
-                          <div className="flex items-center gap-2 text-[10px] font-mono text-charcoal-500 bg-background/50 p-2 rounded-lg break-all">
-                             <ShieldCheck size={10} className="text-emerald-500 shrink-0" />
-                             {p.tx}
+                          <div className="flex items-center gap-3 text-[10px] font-mono text-charcoal-600 bg-background/50 p-3 rounded-2xl border border-white/[0.03] break-all group-hover:border-white/10 transition-all">
+                             <ShieldCheck size={12} className="text-emerald-500 shrink-0" />
+                             <span className="truncate">{p.tx}</span>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="bg-charcoal-950 p-8 rounded-[40px] border border-white/5 space-y-6 relative overflow-hidden group shadow-premium">
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="bg-charcoal-950 p-10 rounded-[48px] border border-white/5 space-y-8 relative overflow-hidden group shadow-premium"
+                  >
                     <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="flex items-center justify-between relative z-10">
-                      <div className="flex items-center gap-3">
-                        <Wallet size={20} className="text-primary" />
-                        <span className="text-sm font-black uppercase tracking-widest text-white">Wallet Sync</span>
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center">
+                           <Wallet size={20} className="text-primary" />
+                        </div>
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-white">Economic Node</span>
                       </div>
-                      <Badge variant="success">Verified</Badge>
+                      <Badge variant="success">Synchronized</Badge>
                     </div>
-                    <p className="text-xs text-charcoal-400 font-bold leading-relaxed relative z-10">
-                      Autonomous transactions settled via Axiom economic layer. No human authorization required.
+                    <p className="text-sm text-charcoal-500 font-bold leading-relaxed relative z-10">
+                      All capabilities were secured via x402 settlement. Receipts are cryptographically verified and recorded on-ledger.
                     </p>
                     <button
                       onClick={() => setStatus('idle')}
-                      className="w-full btn-secondary py-4 text-xs uppercase tracking-widest relative z-10"
+                      className="w-full bg-white text-black h-14 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-50 transition-all relative z-10 active:scale-95"
                     >
-                      New Mission <ArrowRight size={14} />
+                      New Mission <ArrowRight size={16} className="ml-2" />
                     </button>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>

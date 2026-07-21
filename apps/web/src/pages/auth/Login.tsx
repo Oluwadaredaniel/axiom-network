@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Send, Loader2, ShieldCheck, Sparkles } from 'lucide-react';
+import { Send, Loader2, ShieldCheck, Sparkles, Cpu, Brain, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '@/components/ui/Badge';
 
@@ -29,90 +29,120 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <div className="hidden lg:flex w-1/2 bg-surface p-16 flex-col justify-between relative overflow-hidden border-r border-white/5">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 blur-[150px] -mr-64 -mt-64 rounded-full" />
+    <div className="min-h-screen bg-background flex flex-col lg:flex-row overflow-hidden">
+      {/* Brand Column */}
+      <div className="hidden lg:flex w-[40%] bg-[#111113] p-16 flex-col justify-between relative overflow-hidden border-r border-white/5">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 blur-[180px] -mr-64 -mt-64 rounded-full" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-cyan/5 blur-[120px] -ml-32 -mb-32 rounded-full" />
 
-        <Link to="/" className="flex items-center gap-3 relative z-10">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-glow shadow-primary/20">
-            <span className="font-black text-2xl text-white">A</span>
+        <Link to="/" className="flex items-center gap-4 relative z-10 group">
+          <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-glow shadow-primary/30 group-hover:rotate-6 transition-transform duration-500">
+            <span className="text-white font-black text-2xl">A</span>
           </div>
-          <span className="font-display font-black text-2xl tracking-tight uppercase">AXIOM</span>
+          <span className="font-display font-black text-3xl tracking-tighter uppercase">AXIOM</span>
         </Link>
 
-        <div className="relative z-10 space-y-8">
-          <Badge variant="primary" className="px-4 py-1">Infrastructure Access</Badge>
-          <h2 className="text-7xl font-black leading-[0.9] tracking-tighter">
+        <div className="relative z-10 space-y-10">
+          <div className="flex items-center gap-4">
+             <Badge variant="primary" className="px-5 py-1.5 rounded-xl text-[10px] font-black tracking-widest border-primary/30 bg-primary/5">Node Authorization</Badge>
+          </div>
+          <h2 className="text-8xl font-black leading-[0.85] tracking-tighter text-white">
             The Economic <br />
-            <span className="text-primary italic">Handshake</span> <br />
+            <span className="text-primary italic">Identity</span> <br />
             for AI.
           </h2>
-          <p className="text-charcoal-400 text-xl max-w-md font-medium leading-relaxed">
-            Authenticated nodes can execute complex workflows and settle micro-transactions instantly.
+          <p className="text-charcoal-400 text-2xl max-w-md font-medium leading-relaxed tracking-tight">
+            Authorize your controller node to settle x402 challenges and discover specialized capabilities.
           </p>
         </div>
 
-        <div className="flex items-center gap-8 relative z-10">
-           <div className="flex items-center gap-2 text-charcoal-500 font-bold text-xs uppercase tracking-widest">
-              <ShieldCheck size={16} className="text-emerald-500" /> AES-256 Encrypted
+        <div className="flex flex-col gap-8 relative z-10">
+           <div className="h-px w-20 bg-white/10" />
+           <div className="flex items-center gap-10">
+              <div className="flex items-center gap-3 text-charcoal-500 font-black text-[10px] uppercase tracking-[0.2em]">
+                 <ShieldCheck size={18} className="text-emerald-500 shadow-glow" /> AES-256 Protocol
+              </div>
+              <div className="flex items-center gap-3 text-charcoal-500 font-black text-[10px] uppercase tracking-[0.2em]">
+                 <Brain size={18} className="text-primary" /> Autonomous Ready
+              </div>
            </div>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-24 relative">
+      {/* Form Column */}
+      <div className="flex-1 flex flex-col items-center justify-center p-10 md:p-24 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full -z-10" />
+
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md space-y-10"
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-lg space-y-12"
         >
-          <div className="space-y-2">
-            <h1 className="text-4xl font-black">Welcome back</h1>
-            <p className="text-charcoal-400 font-bold text-sm">Initialize your controller node to begin.</p>
+          <div className="lg:hidden mb-12 flex justify-between items-center">
+             <Link to="/" className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl shadow-glow">A</div>
+                <span className="font-display font-black text-xl tracking-tight uppercase">AXIOM</span>
+             </Link>
+             <Link to="/" className="text-charcoal-500 p-2"><ArrowLeft size={24} /></Link>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal-500 ml-1">Controller Email</label>
+          <div className="space-y-4">
+            <h1 className="text-5xl font-black tracking-tight uppercase">Authorize</h1>
+            <p className="text-charcoal-400 font-bold text-xl tracking-tight">Initialize your controller session to begin orchestration.</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-8">
+            <div className="space-y-3">
+              <label className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal-500 ml-2">Node Identifier (Email)</label>
               <input
                 type="email"
                 required
-                className="input-field w-full"
-                placeholder="controller@axiom.network"
+                className="w-full h-20 bg-surface/50 border-2 border-white/[0.05] rounded-[24px] px-8 text-xl font-bold focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all text-white placeholder:text-charcoal-700 shadow-premium"
+                placeholder="node-01@axiom.network"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-charcoal-500 ml-1">Access Key</label>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center px-2">
+                <label className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal-500">Access Secret</label>
+                <a href="#" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors">Emergency Recovery</a>
+              </div>
               <input
                 type="password"
                 required
-                className="input-field w-full"
-                placeholder="••••••••"
+                className="w-full h-20 bg-surface/50 border-2 border-white/[0.05] rounded-[24px] px-8 text-xl font-bold focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all text-white placeholder:text-charcoal-700 shadow-premium"
+                placeholder="••••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
             {error && (
-              <div className="p-4 bg-rose-500/10 text-rose-400 rounded-xl text-xs font-bold border border-rose-500/20">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-6 bg-rose-500/10 text-rose-400 rounded-3xl text-sm font-bold border border-rose-500/20 shadow-inner flex items-center gap-4"
+              >
+                <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
                 {error}
-              </div>
+              </motion.div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-5 text-base"
+              className="w-full h-20 bg-white text-black rounded-[28px] font-black text-xl uppercase tracking-widest flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-glow shadow-white/10 disabled:opacity-20"
             >
-              {loading ? <Loader2 size={24} className="animate-spin" /> : <>Initialize Session <Send size={18} /></>}
+              {loading ? <Loader2 size={32} className="animate-spin" strokeWidth={3} /> : <>Initiate Session <Send size={24} strokeWidth={3} /></>}
             </button>
           </form>
 
-          <div className="pt-8 text-center border-t border-white/5">
-            <p className="text-charcoal-400 text-sm font-bold">
-              New to the network? <Link to="/register" className="text-primary hover:text-primary-light transition-colors">Register Node</Link>
+          <div className="pt-10 text-center border-t border-white/5">
+            <p className="text-charcoal-400 text-lg font-medium">
+              New node operator? <Link to="/register" className="text-primary hover:text-white font-black underline underline-offset-8 transition-colors decoration-2">Register Node</Link>
             </p>
           </div>
         </motion.div>
