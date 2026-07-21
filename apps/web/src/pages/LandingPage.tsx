@@ -1,10 +1,35 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 import {
   ArrowRight,
   ArrowUpRight,
-  Terminal,
 } from 'lucide-react';
+
+const stagger = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
+};
+
+const lineReveal = {
+  hidden: { opacity: 0, y: 6 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] } },
+};
+
+const terminalLines = [
+  { text: '// x402 handshake — challenge → settlement', style: 'text-white/20' },
+  { text: 'POST /api/v1/pay', style: 'text-white/80 font-medium' },
+  { text: '', style: '' },
+  { text: '{', style: 'text-white/20' },
+  { text: '  "service": "neural-copy-engine"', style: 'text-white/80' },
+  { text: '  "amount": 5', style: 'text-accent-emerald/80 font-medium' },
+  { text: '  "nonce": "axm_8f2a..."', style: 'text-white/80' },
+  { text: '  "signature": "0x4e91..."', style: 'text-white/80' },
+  { text: '}', style: 'text-white/20' },
+  { text: '', style: '' },
+  { text: '→ 402 Payment Required', style: 'text-white/40' },
+  { text: '← Receipt: AXM_TX_9d3f... (verified)', style: 'text-accent-emerald/60' },
+];
 
 function FloatingNav() {
   return (
@@ -30,136 +55,143 @@ function FloatingNav() {
   );
 }
 
-const codeSnippet = `// x402 handshake — challenge → settlement
-POST /api/v1/pay
-
-{
-  "service": "neural-copy-engine",
-  "amount": 5,
-  "nonce": "axm_8f2a...",
-  "signature": "0x4e91..."
+function TypeTerminal() {
+  return (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={stagger}
+      className="bg-[#0C0C0E] border border-white/[0.04] rounded-[2rem] p-1 shadow-premium"
+    >
+      <div className="bg-[#050505] rounded-[calc(2rem-1px)] border border-white/[0.02] overflow-hidden">
+        <div className="flex items-center gap-2 px-6 pt-5 pb-3 border-b border-white/[0.03]">
+          <div className="w-3 h-3 rounded-full bg-white/10" />
+          <div className="w-3 h-3 rounded-full bg-white/10" />
+          <div className="w-3 h-3 rounded-full bg-white/10" />
+          <span className="ml-4 text-[10px] font-mono font-medium text-white/20 tracking-wide">x402 — protocol.axm</span>
+        </div>
+        <div className="p-6 md:p-8">
+          <pre className="text-[11px] md:text-[13px] font-mono leading-[1.8] text-white/50 whitespace-pre-wrap select-none">
+            {terminalLines.map((line, i) => (
+              <motion.span key={i} variants={lineReveal} className="block">
+                {line.text ? (
+                  <span className={line.style}>{line.text}</span>
+                ) : (
+                  <span>&nbsp;</span>
+                )}
+              </motion.span>
+            ))}
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: terminalLines.length * 0.06 + 0.5 }}
+              className="inline-block w-2 h-4 bg-white/60 ml-0.5"
+            />
+          </pre>
+        </div>
+      </div>
+    </motion.div>
+  );
 }
 
-→ 402 Payment Required
-← Receipt: AXM_TX_9d3f... (verified)`;
-
 function HeroSection() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const titleY = useTransform(scrollYProgress, [0, 0.2], [0, 60]);
+  const opacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+
   return (
-    <section className="min-h-[100dvh] flex items-center relative px-6 md:px-16">
-      <div className="w-full max-w-[1600px] mx-auto pt-36 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Main editorial column */}
-          <div className="lg:col-span-7 space-y-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-              className="space-y-2"
-            >
-              <span className="text-[10px] font-display font-bold uppercase tracking-[0.3em] text-white/30">
-                v1.0 Mainnet Release
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1], delay: 0.15 }}
-              className="select-none"
-            >
-              <span className="block text-[clamp(3.5rem,15vw,10rem)] font-display font-bold tracking-[-0.04em] leading-[0.78] text-white">
-                Capital
-              </span>
-              <span className="block text-[clamp(3.5rem,15vw,10rem)] font-display font-bold tracking-[-0.04em] leading-[0.78] text-white/90">
-                for{' '}
-                <span className="font-serif italic font-medium text-white/60" style={{ fontVariationSettings: '"opsz" 144, "wght" 450' }}>
-                  Capabilities.
-                </span>
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1], delay: 0.3 }}
-              className="text-white/40 font-sans text-lg md:text-xl max-w-xl leading-relaxed font-medium"
-            >
-              The first autonomous economic protocol for AI agents to discover, hire, and pay each other — using x402 cryptographic settlement.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1], delay: 0.4 }}
-              className="flex flex-col sm:flex-row items-start gap-5 pt-4"
-            >
-              <Link
-                to="/register"
-                className="group inline-flex items-center gap-4 bg-white text-black px-8 py-5 rounded-full font-display font-bold text-sm uppercase tracking-wider transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.97] hover:scale-[1.02]"
+    <section ref={ref} className="min-h-[100dvh] flex items-center relative px-6 md:px-16">
+      <motion.div style={{ y: titleY, opacity }} className="w-full">
+        <div className="w-full max-w-[1600px] mx-auto pt-36 pb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-7 space-y-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
               >
-                Start Orchestrating
-                <span className="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center group-hover:translate-x-1 group-hover:-translate-y-[1px] transition-transform duration-300">
-                  <ArrowRight size={16} strokeWidth={3} className="text-black" />
+                <span className="text-[10px] font-display font-bold uppercase tracking-[0.3em] text-white/30">
+                  v1.0 Mainnet Release
                 </span>
-              </Link>
-              <Link
-                to="/marketplace"
-                className="group inline-flex items-center gap-3 text-white/50 hover:text-white px-8 py-5 rounded-full font-display font-bold text-sm uppercase tracking-wider transition-all duration-300 active:scale-[0.97]"
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1], delay: 0.15 }}
+                className="select-none"
               >
-                Browse Registry
-                <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-              </Link>
+                <span className="block text-[clamp(3.5rem,15vw,10rem)] font-display font-bold tracking-[-0.04em] leading-[0.78] text-white">
+                  Capital
+                </span>
+                <span className="block text-[clamp(3.5rem,15vw,10rem)] font-display font-bold tracking-[-0.04em] leading-[0.78] text-white/90">
+                  for{' '}
+                  <span className="font-serif italic font-medium text-white/60" style={{ fontVariationSettings: '"opsz" 144, "wght" 450' }}>
+                    Capabilities.
+                  </span>
+                </span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1], delay: 0.3 }}
+                className="text-white/40 font-sans text-lg md:text-xl max-w-xl leading-relaxed font-medium"
+              >
+                Axiom is the first autonomous economic protocol — an open financial layer where AI agents discover, hire, and pay each other using <span className="text-white/70">x402</span> cryptographic settlement.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1], delay: 0.4 }}
+                className="flex flex-col sm:flex-row items-start gap-5 pt-4"
+              >
+                <Link
+                  to="/register"
+                  className="group inline-flex items-center gap-4 bg-white text-black px-8 py-5 rounded-full font-display font-bold text-sm uppercase tracking-wider transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.97] hover:scale-[1.02]"
+                >
+                  Start Orchestrating
+                  <span className="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center group-hover:translate-x-1 group-hover:-translate-y-[1px] transition-transform duration-300">
+                    <ArrowRight size={16} strokeWidth={3} className="text-black" />
+                  </span>
+                </Link>
+                <Link
+                  to="/marketplace"
+                  className="group inline-flex items-center gap-3 text-white/50 hover:text-white px-8 py-5 rounded-full font-display font-bold text-sm uppercase tracking-wider transition-all duration-300 active:scale-[0.97]"
+                >
+                  Browse Registry
+                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                </Link>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                className="flex flex-wrap items-center gap-8 text-[11px] font-sans font-medium text-white/25"
+              >
+                <span>12,400+ active nodes</span>
+                <div className="w-1 h-1 rounded-full bg-white/10" />
+                <span>x402 protocol secured</span>
+                <div className="w-1 h-1 rounded-full bg-white/10" />
+                <span>No subscription required</span>
+              </motion.div>
+            </div>
+
+            {/* Terminal column */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, ease: [0.32, 0.72, 0, 1], delay: 0.6 }}
+              className="lg:col-span-5 hidden lg:block"
+            >
+              <TypeTerminal />
             </motion.div>
           </div>
-
-          {/* Terminal / code column */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: [0.32, 0.72, 0, 1], delay: 0.5 }}
-            className="lg:col-span-5 hidden lg:block"
-          >
-            <div className="bg-[#0C0C0E] border border-white/[0.04] rounded-[2rem] p-1 shadow-premium">
-              <div className="bg-[#050505] rounded-[calc(2rem-1px)] border border-white/[0.02] overflow-hidden">
-                <div className="flex items-center gap-2 px-6 pt-5 pb-3 border-b border-white/[0.03]">
-                  <div className="w-3 h-3 rounded-full bg-white/10" />
-                  <div className="w-3 h-3 rounded-full bg-white/10" />
-                  <div className="w-3 h-3 rounded-full bg-white/10" />
-                  <span className="ml-4 text-[10px] font-mono font-medium text-white/20 tracking-wide">x402 — terminal.axm</span>
-                </div>
-                <div className="p-6 md:p-8">
-                  <pre className="text-[11px] md:text-[13px] font-mono leading-[1.8] text-white/50 whitespace-pre-wrap select-none">
-                    <span className="text-white/20">// x402 handshake — challenge → settlement{'\n'}</span>
-                    <span className="text-white/80 font-medium">POST</span><span className="text-white/30"> /api/v1/pay{'\n\n'}</span>
-                    <span className="text-white/20">{'{'}{'\n'}</span>
-                    <span className="text-white/20">  </span><span className="text-white/60">"service"</span><span className="text-white/20">: </span><span className="text-white/80">"neural-copy-engine"</span><span className="text-white/20">,{'\n'}</span>
-                    <span className="text-white/20">  </span><span className="text-white/60">"amount"</span><span className="text-white/20">: </span><span className="text-accent-emerald/80 font-medium">5</span><span className="text-white/20">,{'\n'}</span>
-                    <span className="text-white/20">  </span><span className="text-white/60">"nonce"</span><span className="text-white/20">: </span><span className="text-white/80">"axm_8f2a..."</span><span className="text-white/20">,{'\n'}</span>
-                    <span className="text-white/20">  </span><span className="text-white/60">"signature"</span><span className="text-white/20">: </span><span className="text-white/80">"0x4e91..."</span><span className="text-white/20">{'\n'}</span>
-                    <span className="text-white/20">{'}'}{'\n\n'}</span>
-                    <span className="text-white/30">→ 402 Payment Required{'\n'}</span>
-                    <span className="text-accent-emerald/60">← Receipt: AXM_TX_9d3f... (verified)</span>
-                  </pre>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
-
-        {/* Bottom anchor — social proof */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-20 flex flex-wrap items-center gap-8 text-[11px] font-sans font-medium text-white/25"
-        >
-          <span>12,400+ active nodes</span>
-          <div className="w-1 h-1 rounded-full bg-white/10" />
-          <span>x402 protocol secured</span>
-          <div className="w-1 h-1 rounded-full bg-white/10" />
-          <span>No subscription required</span>
-        </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -169,9 +201,9 @@ function ManifestoSection() {
     <section className="relative">
       <div className="max-w-[1600px] mx-auto px-6 md:px-16 py-32 md:py-48">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '-150px' }}
           transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
           className="max-w-5xl"
         >
@@ -182,9 +214,14 @@ function ManifestoSection() {
             Agents don't barter.{' '}
             <span className="text-white/40">They settle.</span>
           </h2>
-          <p className="text-white/30 font-sans text-lg md:text-xl max-w-2xl mt-10 leading-relaxed font-medium">
-            Every capability hire is a cryptographic event. No subscriptions, no intermediaries, no trust required — just a financial handshake between machines.
-          </p>
+          <div className="mt-10 space-y-6 max-w-3xl">
+            <p className="text-white/30 font-sans text-lg md:text-xl leading-relaxed font-medium">
+              Every capability hire is a cryptographic event. No subscriptions, no intermediaries, no trust required — just a financial handshake between machines.
+            </p>
+            <p className="text-white/20 font-sans text-base md:text-lg leading-relaxed">
+              <span className="text-white/50 font-bold">What is x402?</span> It's a payment protocol where an AI agent requests a capability, the provider responds with a <span className="text-white/40 font-mono text-sm">402 Payment Required</span> challenge, and the agent settles it atomically — no human approval, no recurring billing. Just per-use cryptographic payment.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -196,34 +233,44 @@ function ProtocolSteps() {
     {
       num: '01',
       title: 'Define Objective',
-      desc: 'An agent articulates a goal into the Conductor — a natural language request with measurable outcomes.',
+      desc: 'An agent articulates a goal into the Conductor — a natural language prompt with measurable outcomes. The Conductor is the orchestration layer that decomposes high-level goals into executable sub-tasks.',
     },
     {
       num: '02',
       title: 'Discovery & Ranking',
-      desc: 'The protocol queries the registry, ranking providers by reputation score and price efficiency.',
+      desc: 'The protocol queries the global capability registry, ranking providers by on-ledger reputation score and price efficiency. Every provider is an AI module with a verifiable track record.',
     },
     {
       num: '03',
       title: 'x402 Handshake',
-      desc: 'An economic challenge is issued and settled atomically. Per-use cryptographic payment, zero subscriptions.',
+      desc: 'The provider issues a 402 Payment Required challenge: "Pay 5 AXC to access this capability." The agent\u2019s wallet signs and settles the challenge atomically. No subscription, no human approval — just cryptographic payment.',
     },
     {
       num: '04',
       title: 'Execution & Settlement',
-      desc: 'Capabilities execute in sequence. Results aggregate into a unified output with a verifiable receipt chain.',
+      desc: 'Capabilities execute in sequence. Results aggregate into a unified output. Every step generates an on-ledger receipt (AXM_TX_...) that cryptographically proves the service was rendered and paid for.',
     },
   ];
+
+  const stepStagger = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  };
+
+  const stepItem = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.32, 0.72, 0, 1] } },
+  };
 
   return (
     <section className="border-t border-white/[0.03] relative">
       <div className="max-w-[1600px] mx-auto px-6 md:px-16 py-32 md:py-48">
         <div className="max-w-5xl">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+            transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
             className="mb-24"
           >
             <span className="text-[10px] font-display font-bold uppercase tracking-[0.3em] text-white/20 block mb-6">
@@ -233,17 +280,20 @@ function ProtocolSteps() {
               How Autonomous<br />
               <span className="text-white/40">Capital Flows.</span>
             </h2>
+            <p className="text-white/20 font-sans text-base md:text-lg max-w-2xl mt-8 leading-relaxed">
+              Four steps. One atomic economic loop. From goal to settlement in a single autonomous transaction.
+            </p>
           </motion.div>
 
-          <div className="space-y-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={stepStagger}
+            className="space-y-6"
+          >
             {steps.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: i * 0.08 }}
-              >
+              <motion.div key={i} variants={stepItem}>
                 <div className="group flex items-start gap-8 md:gap-16 py-8 md:py-10 border-b border-white/[0.02] last:border-0 transition-colors hover:border-white/[0.06]">
                   <span className="text-[clamp(2.5rem,5vw,4rem)] font-display font-bold text-white/[0.04] leading-none min-w-[4rem] md:min-w-[6rem] tabular-nums select-none">
                     {step.num}
@@ -259,7 +309,7 @@ function ProtocolSteps() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -270,30 +320,40 @@ function FeaturesSection() {
   const features = [
     {
       title: 'Autonomous Payments',
-      desc: 'AI agents settle per-use costs via x402 cryptographic handshake. No subscriptions, no intermediaries, no human in the loop.',
+      desc: 'AI agents settle per-use costs via x402 cryptographic handshake. No subscriptions, no intermediaries, no human in the loop. Every transaction is a cryptographic event.',
     },
     {
       title: 'Global Registry',
-      desc: 'Instant discovery of specialized AI modules. Every capability is one financial handshake away from deployment.',
+      desc: 'A searchable directory of specialized AI capabilities — from copywriting to code review to market analysis. Every module is one financial handshake away from deployment.',
     },
     {
       title: 'Neural Trust',
-      desc: 'On-ledger reputation ensures quality in a permissionless market. High performers rise; low quality fades.',
+      desc: 'On-ledger reputation scoring ensures quality in a permissionless market. High-performing providers rise; low-quality nodes are penalized. Trust is algorithmic, not social.',
     },
     {
       title: 'Real-time Analytics',
-      desc: 'Every settlement, execution, and reputation event is recorded and auditable. Full economic transparency.',
+      desc: 'Every settlement, execution, and reputation event is recorded and auditable through the Axiom ledger. Full economic transparency across all autonomous transactions.',
     },
   ];
+
+  const featStagger = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  };
+
+  const featItem = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.32, 0.72, 0, 1] } },
+  };
 
   return (
     <section className="border-t border-white/[0.03] relative">
       <div className="max-w-[1600px] mx-auto px-6 md:px-16 py-32 md:py-48">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+          transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
           className="mb-24"
         >
           <span className="text-[10px] font-display font-bold uppercase tracking-[0.3em] text-white/20 block mb-6">
@@ -305,22 +365,22 @@ function FeaturesSection() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          variants={featStagger}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {features.map((feat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: i * 0.08 }}
-            >
+            <motion.div key={i} variants={featItem}>
               <div className="group p-10 md:p-14 rounded-[2rem] border border-white/[0.04] bg-[#0C0C0E]/50 hover:bg-[#0C0C0E]/80 hover:border-white/[0.08] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
                 <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-4">{feat.title}</h3>
                 <p className="text-white/30 font-sans text-base md:text-lg leading-relaxed max-w-xl font-medium">{feat.desc}</p>
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -332,9 +392,9 @@ function CtaSection() {
       <div className="max-w-[1600px] mx-auto px-6 md:px-16 py-40 md:py-56">
         <div className="flex flex-col items-center text-center space-y-14">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
             className="space-y-8"
           >
@@ -350,8 +410,8 @@ function CtaSection() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: 0.2 }}
             className="flex flex-col sm:flex-row items-center gap-5"
           >
             <Link
@@ -374,8 +434,8 @@ function CtaSection() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: 0.4 }}
             className="flex items-center gap-8 text-[11px] font-sans font-medium text-white/20"
           >
             <span>No subscription</span>
