@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import prisma from 'database';
 import { ConductorService } from '../services/conductor.service';
 import { sendSuccess, sendError } from '../utils/response';
 import { AuthRequest } from '../middleware/auth.middleware';
@@ -33,8 +34,36 @@ export class ConductorController {
 
   static async getStatus(req: AuthRequest, res: Response) {
     try {
-      // Placeholder for getting execution status by ID
-      return sendSuccess(res, { status: 'Not implemented' });
+      const userId = req.user?.userId;
+      if (!userId) return sendError(res, 'Unauthorized', 401);
+
+      const { id } = req.params;
+      if (!id) return sendError(res, 'Execution ID is required', 400);
+
+      const execution = await prisma.execution.findFirst({
+        where: { id, userId },
+        select: {
+          id: true,
+          status: true,
+          totalCost: true,
+          summary: true,
+          duration: true,
+          createdAt: true,
+          updatedAt: true,
+          steps: {
+            orderBy: { order: 'asc' },
+            select: {
+              id: true,
+              capabilityName: true,
+              status: true,
+              cost: true,
+            }
+          }
+        }
+      });
+
+      if (!execution) return sendError(res, 'Execution not found', 404);
+      return sendSuccess(res, execution);
     } catch (error: any) {
       return sendError(res, error.message);
     }
