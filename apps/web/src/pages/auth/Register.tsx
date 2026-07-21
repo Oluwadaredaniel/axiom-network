@@ -1,33 +1,37 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { motion } from 'framer-motion';
-import { Send, User, Code, ShieldCheck, Loader2, Cpu, ArrowLeft, Globe, Zap } from 'lucide-react';
+import { Send, Code, ShieldCheck, Loader2, Cpu, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/utils/cn';
 
-export default function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [role, setRole] = useState<'USER' | 'DEVELOPER'>('USER');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+const registerSchema = z.object({
+  name: z.string().min(2, 'Operator name must be at least 2 characters'),
+  email: z.string().email('Invalid email endpoint format'),
+  password: z.string().min(6, 'Security keyphrase must be at least 6 characters'),
+});
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+type RegisterForm = z.infer<typeof registerSchema>;
+
+export default function Register() {
+  const [role, setRole] = useState<'USER' | 'DEVELOPER'>('USER');
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data: RegisterForm) => {
     try {
-      const res = await axios.post('/api/auth/register', { email, password, name, role });
+      const res = await axios.post('/api/auth/register', { ...data, role });
       localStorage.setItem('token', res.data.data.token);
       navigate('/dashboard');
       window.location.reload();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed');
-    } finally {
-      setLoading(false);
+      setError('root', { message: err.response?.data?.message || 'Registration failed' });
     }
   };
 
@@ -105,60 +109,66 @@ export default function Register() {
             <p className="text-charcoal-400 font-bold text-xl tracking-tight leading-relaxed">Join the first standardized economic protocol for the autonomous era.</p>
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-3">
               <label className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal-500 ml-2">Operator Name</label>
               <input
                 type="text"
-                required
-                className="w-full h-20 bg-surface/50 border-2 border-white/[0.05] rounded-[24px] px-8 text-xl font-bold focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all text-white placeholder:text-charcoal-700 shadow-premium"
+                {...register('name')}
+                className={cn(
+                  "w-full h-20 bg-surface/50 border-2 rounded-[24px] px-8 text-xl font-bold focus:outline-none transition-all text-white placeholder:text-charcoal-700 shadow-premium",
+                  errors.name ? "border-rose-500/50 focus:border-rose-500" : "border-white/[0.05] focus:border-primary/50"
+                )}
                 placeholder="Axiom Controller #1"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
               />
+              {errors.name && <p className="text-rose-400 text-xs font-bold px-2 mt-1">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-3">
               <label className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal-500 ml-2">Email Endpoint</label>
               <input
                 type="email"
-                required
-                className="w-full h-20 bg-surface/50 border-2 border-white/[0.05] rounded-[24px] px-8 text-xl font-bold focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all text-white placeholder:text-charcoal-700 shadow-premium"
+                {...register('email')}
+                className={cn(
+                  "w-full h-20 bg-surface/50 border-2 rounded-[24px] px-8 text-xl font-bold focus:outline-none transition-all text-white placeholder:text-charcoal-700 shadow-premium",
+                  errors.email ? "border-rose-500/50 focus:border-rose-500" : "border-white/[0.05] focus:border-primary/50"
+                )}
                 placeholder="controller@yourdomain.ai"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
+              {errors.email && <p className="text-rose-400 text-xs font-bold px-2 mt-1">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-3">
               <label className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal-500 ml-2">Security Keyphrase</label>
               <input
                 type="password"
-                required
-                className="w-full h-20 bg-surface/50 border-2 border-white/[0.05] rounded-[24px] px-8 text-xl font-bold focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all text-white placeholder:text-charcoal-700 shadow-premium"
+                {...register('password')}
+                className={cn(
+                  "w-full h-20 bg-surface/50 border-2 rounded-[24px] px-8 text-xl font-bold focus:outline-none transition-all text-white placeholder:text-charcoal-700 shadow-premium",
+                  errors.password ? "border-rose-500/50 focus:border-rose-500" : "border-white/[0.05] focus:border-primary/50"
+                )}
                 placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
               />
+              {errors.password && <p className="text-rose-400 text-xs font-bold px-2 mt-1">{errors.password.message}</p>}
             </div>
 
-            {error && (
+            {errors.root && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="p-6 bg-rose-500/10 text-rose-400 rounded-[28px] text-sm font-bold border border-rose-500/20 flex items-center gap-4"
               >
                 <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
-                {error}
+                {errors.root.message}
               </motion.div>
             )}
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="w-full h-20 bg-white text-black rounded-[32px] font-black text-xl uppercase tracking-widest flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-glow shadow-white/10 disabled:opacity-20"
             >
-              {loading ? <Loader2 size={32} className="animate-spin" strokeWidth={3} /> : <>Generate Identity <Send size={24} strokeWidth={3} /></>}
+              {isSubmitting ? <Loader2 size={32} className="animate-spin" strokeWidth={3} /> : <>Generate Identity <Send size={24} strokeWidth={3} /></>}
             </button>
           </form>
 

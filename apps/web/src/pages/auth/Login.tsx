@@ -1,30 +1,34 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { motion } from 'framer-motion';
-import { Send, Loader2, ShieldCheck, Sparkles, Cpu, Brain, ArrowLeft } from 'lucide-react';
+import { Send, Loader2, ShieldCheck, Brain, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '@/components/ui/Badge';
+import { cn } from '@/utils/cn';
+
+const loginSchema = z.object({
+  email: z.string().email('Invalid node identifier format'),
+  password: z.string().min(6, 'Access secret must be at least 6 characters'),
+});
+
+type LoginForm = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  const onSubmit = async (data: LoginForm) => {
     try {
-      const res = await axios.post('/api/auth/login', { email, password });
+      const res = await axios.post('/api/auth/login', data);
       localStorage.setItem('token', res.data.data.token);
       navigate('/dashboard');
       window.location.reload();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Invalid credentials');
-    } finally {
-      setLoading(false);
+      setError('root', { message: err.response?.data?.message || 'Invalid credentials' });
     }
   };
 
@@ -92,51 +96,54 @@ export default function Login() {
             <p className="text-charcoal-400 font-bold text-xl tracking-tight">Initialize your controller session to begin orchestration.</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-3">
               <label className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal-500 ml-2">Node Identifier (Email)</label>
               <input
                 type="email"
-                required
-                className="w-full h-20 bg-surface/50 border-2 border-white/[0.05] rounded-[24px] px-8 text-xl font-bold focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all text-white placeholder:text-charcoal-700 shadow-premium"
+                {...register('email')}
+                className={cn(
+                  "w-full h-20 bg-surface/50 border-2 rounded-[24px] px-8 text-xl font-bold focus:outline-none transition-all text-white placeholder:text-charcoal-700 shadow-premium",
+                  errors.email ? "border-rose-500/50 focus:border-rose-500" : "border-white/[0.05] focus:border-primary/50"
+                )}
                 placeholder="node-01@axiom.network"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
+              {errors.email && <p className="text-rose-400 text-xs font-bold px-2 mt-1">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between items-center px-2">
                 <label className="text-[11px] font-black uppercase tracking-[0.3em] text-charcoal-500">Access Secret</label>
-                <a href="#" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors">Emergency Recovery</a>
               </div>
               <input
                 type="password"
-                required
-                className="w-full h-20 bg-surface/50 border-2 border-white/[0.05] rounded-[24px] px-8 text-xl font-bold focus:outline-none focus:border-primary/50 focus:bg-surface/80 transition-all text-white placeholder:text-charcoal-700 shadow-premium"
+                {...register('password')}
+                className={cn(
+                  "w-full h-20 bg-surface/50 border-2 rounded-[24px] px-8 text-xl font-bold focus:outline-none transition-all text-white placeholder:text-charcoal-700 shadow-premium",
+                  errors.password ? "border-rose-500/50 focus:border-rose-500" : "border-white/[0.05] focus:border-primary/50"
+                )}
                 placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
               />
+              {errors.password && <p className="text-rose-400 text-xs font-bold px-2 mt-1">{errors.password.message}</p>}
             </div>
 
-            {error && (
+            {errors.root && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="p-6 bg-rose-500/10 text-rose-400 rounded-3xl text-sm font-bold border border-rose-500/20 shadow-inner flex items-center gap-4"
               >
                 <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
-                {error}
+                {errors.root.message}
               </motion.div>
             )}
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="w-full h-20 bg-white text-black rounded-[28px] font-black text-xl uppercase tracking-widest flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-glow shadow-white/10 disabled:opacity-20"
             >
-              {loading ? <Loader2 size={32} className="animate-spin" strokeWidth={3} /> : <>Initiate Session <Send size={24} strokeWidth={3} /></>}
+              {isSubmitting ? <Loader2 size={32} className="animate-spin" strokeWidth={3} /> : <>Initiate Session <Send size={24} strokeWidth={3} /></>}
             </button>
           </form>
 
