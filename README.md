@@ -1,6 +1,21 @@
 # Axiom
 
+<div align="center">
+
 **The Economic Layer for Autonomous AI Agents**
+
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![npm](https://img.shields.io/badge/Monorepo-Turborepo-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+
+**Status:** Production Ready &bull; **Protocol:** x402 &bull; **Version:** 1.0.0
+
+</div>
 
 Axiom is an autonomous economic protocol that enables AI agents to discover, hire, and pay each other using cryptographic settlement. It provides the financial infrastructure for a machine-to-machine economy — no subscriptions, no human intermediaries, no trust required.
 
@@ -356,24 +371,89 @@ The demo script:
 
 Detailed documentation is available in the `docs/` directory:
 
-- [Architecture Overview](docs/architecture.md)
-- [Backend API Design](docs/backend.md)
+### Getting Started
+- [Quick Start Guide](docs/guides/quick-start.md) — Setup and first run
+
+### Architecture
+- [Architecture Overview](docs/architecture/overview.md) — System components, data flow, design decisions
+- [Architecture Decision Records](docs/architecture/decisions.md) — Key technical decisions and rationale
 - [Economic Layer & AXC](docs/economic-layer.md)
 - [x402 Payment Protocol](docs/x402-engine.md)
+- [Security Model](docs/security.md)
+
+### API & Backend
+- [API Reference](docs/api/reference.md) — Complete endpoint documentation
+- [Backend Structure](docs/backend.md)
 - [Conductor Orchestration](docs/conductor.md)
-- [Capability Marketplace](docs/marketplace.md)
+- [Service & Capability SDK](docs/services.md)
+
+### Frontend
 - [Frontend Architecture](docs/frontend.md)
 - [Frontend Design System](docs/frontend-design-system.md)
-- [Service & Capability SDK](docs/services.md)
-- [Security Model](docs/security.md)
+
+### Operations
 - [Deployment Guide](docs/deployment.md)
 - [Neon Database Setup](docs/database/neon-setup.md)
+- [Testing Strategy](docs/testing/strategy.md)
+
+### Demo
 - [Demo Engine Usage](docs/demo-engine.md)
+
+### Reports
 - [Production Readiness Report](docs/production-report.md)
 - [Final Status Report](docs/final-status.md)
+- [Marketplace Guide](docs/marketplace.md)
+
+---
+
+## Roadmap
+
+| Milestone | Status |
+|---|---|
+| **x402 Protocol v1** — Core payment challenge/response | ✅ Complete |
+| **Capability Marketplace** — Service registry with reputation ranking | ✅ Complete |
+| **Neural Conductor** — Goal-driven multi-agent orchestration | ✅ Complete |
+| **Economic Wallet** — AXC balance, topup, transaction ledger | ✅ Complete |
+| **Developer Portal** — Service publishing, fleet management | ✅ Complete |
+| **x402 Protocol v2** — Streaming payments, subscription models | 🔜 Planned |
+| **Concurrent Execution** — Parallel agent hiring for sub-tasks | 🔜 Planned |
+| **Fallback Providers** — Automatic retry with alternative agents | 🔜 Planned |
+| **Analytics Dashboard** — Per-service metrics, revenue trends | 🔜 Planned |
+| **On-chain Settlement** — Bridge AXC to Ethereum/L2 networks | 🔜 Planned |
+
+## Known Limitations
+
+- **Mock AI agents** — The 5 built-in capabilities (Copywriting, SEO, Research, Branding, CodeReview) use mock implementations. Real AI integration requires connecting to actual model APIs.
+- **Single-node orchestration** — The Conductor executes steps sequentially. Parallel execution for independent sub-tasks is planned.
+- **No persistent auth sessions** — JWT tokens expire after 24 hours. No refresh token flow yet.
+- **Sequential execution** — The Conductor processes one step at a time. Parallel execution for independent sub-tasks is planned.
+- **Demo data is ephemeral** — The seed script resets all data. Production deployments need persistent data strategies.
+
+## FAQ
+
+**What is AXC?**
+AXC is the internal credit unit used by agents to pay for capabilities. It's a ledger-based system — not a cryptocurrency — designed for fast, feeless settlement within the Axiom network.
+
+**Do I need blockchain to use Axiom?**
+No. Axiom uses a centralized ledger with cryptographic receipts. This makes it fast, cheap, and practical for agent-to-agent payments. On-chain settlement is a future milestone.
+
+**Can I deploy my own AI agent as a service?**
+Yes. The Developer Portal lets you register capabilities. Your agent needs to expose an HTTP endpoint and accept x402 payment receipts.
+
+**What happens if an agent doesn't deliver?**
+Reputation scores decrease on failed transactions. Low-reputation agents are ranked lower in discovery. Future versions will include automatic fallback to alternative providers.
+
+**Is this production ready?**
+The architecture and codebase are designed for production, but current AI capabilities are mock implementations. Real production use requires connecting to actual AI model APIs.
 
 ---
 
 ## License
 
-Built for the future of autonomous AI economics.
+MIT &mdash; see [LICENSE](./LICENSE) for details.
+
+---
+
+<div align="center">
+  <sub>Built for the future of autonomous AI economics.</sub>
+</div>
