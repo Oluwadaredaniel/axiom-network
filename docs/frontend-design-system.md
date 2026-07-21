@@ -6,17 +6,17 @@ The Axiom UI is designed to feel like **AI Infrastructure**. It is a professiona
 ## 2. Design Tokens
 
 ### 2.1 Colors (Dark-First)
-- **Background:** `#0A0A0B` (Charcoal-950)
-- **Surface:** `#111113` (Charcoal-900)
-- **Primary:** `#3B82F6` (Blue-500)
-- **Success:** `#10B981` (Emerald-500)
-- **Accent (Cyan):** `#22D3EE`
-- **Muted Text:** `#94A3B8` (Slate-400)
+- **Background:** `#0A0A0B` (stone-950)
+- **Surface:** `#141516` (stone-900)
+- **Primary:** White / White-40 (monochrome editorial; no colored primary)
+- **Success:** Implicit from opacity hierarchy
+- **Depth:** Created via opacity scale: white → white/40 → white/20 → white/10
 
 ### 2.2 Typography
-- **Headings:** `Space Grotesk` - Bold, tight tracking, high-impact.
-- **Body:** `Inter` - Highly readable, professional UI standard.
-- **Code:** `JetBrains Mono` - For cryptographic receipts and agent manifests.
+- **Display:** `Clash Display` — Fontshare, geometric, alternate-width characters for headlines
+- **Body:** `Sora` — Humanist sans-serif, warm and readable for long-form content
+- **Editorial:** `Fraunces` Italic — Old-style serif italic for manifesto accent paragraphs
+- **Code:** `JetBrains Mono` — Developer-friendly monospace for terminals and receipts
 
 ### 2.3 Spacing & Borders
 - **Border Radius:** `12px` (Standard), `24px` (Cards), `48px` (Hero/Large Sections).

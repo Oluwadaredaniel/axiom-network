@@ -12,12 +12,9 @@ The Axiom frontend is built with React, TypeScript, and Vite. It serves as a pro
 - **Icons:** Lucide React
 
 ## Design System
-- **Typography:** Inter (Standard UI)
-- **Colors:** 
-  - `Primary`: blue-500 (#3b82f6)
-  - `Charcoal`: gray-900 (#111827)
-  - `Background`: white / gray-50
-- **Components:** Custom-built minimal components with a focus on high information density and clear hierarchy.
+- **Typography:** Clash Display (headings), Sora (body), Fraunces (editorial italic), JetBrains Mono (code)
+- **Colors (dark):** Monochrome value hierarchy — white → white/40 → white/20 → white/10
+- **Components:** Custom-built with double-bezel cards, glassmorphism, terminal-style elements
 
 ## Project Structure
 - `src/components`: Reusable UI primitives (Buttons, Cards, Modals).
