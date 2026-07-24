@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://github.com/Emerald-dev0/axiom-network/blob/main/README.md
+    about: Check the README and docs/ directory first
