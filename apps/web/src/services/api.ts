@@ -13,6 +13,17 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export async function fetchProfile(): Promise<UserProfile> {
   const res = await client.get<ApiResponse<UserProfile>>('/users/profile');
   return res.data.data;
