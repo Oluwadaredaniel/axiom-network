@@ -1,0 +1,13 @@
+# Commit message format: <type>(<scope>): <subject>
+#
+# Types: feat, fix, docs, style, refactor, perf, test, chore, ci, revert, security
+#
+# Examples:
+#   feat(api): add wallet transaction history endpoint
+#   fix(conductor): handle timeout during execution
+#   docs: update API reference with new endpoints
+#   refactor(wallet): simplify balance check logic
+#   test(api): add unit tests for selection algorithm
+#   ci: add CodeQL security scanning workflow
+#   chore(deps): upgrade framer-motion to v11
+#   security: add input validation to auth routes
