@@ -1,0 +1,36 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore
+      prefix-development: chore
+    groups:
+      react:
+        patterns:
+          - 'react*'
+          - '@types/react*'
+      express:
+        patterns:
+          - 'express*'
+          - '@types/express*'
+      prisma:
+        patterns:
+          - 'prisma*'
+          - '@prisma/*'
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: monthly
+    labels:
+      - ci
+    commit-message:
+      prefix: ci
