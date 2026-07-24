@@ -1,0 +1,17 @@
+# Global owners
+* @Emerald-dev0
+
+# API changes
+apps/api/ @Emerald-dev0
+
+# Frontend changes
+apps/web/ @Emerald-dev0
+
+# Database changes
+packages/database/ @Emerald-dev0
+
+# Documentation
+docs/ @Emerald-dev0
+
+# CI/CD
+.github/ @Emerald-dev0
