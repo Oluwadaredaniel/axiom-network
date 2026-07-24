@@ -1,10 +1,12 @@
 import app from './app';
 import { CapabilityManager } from './services/capabilities/manager';
+import { env } from './config/env';
 
-const PORT = process.env.PORT || 5000;
+const PORT = env.PORT;
 
 app.listen(PORT, async () => {
   console.log(`[server]: Axiom API is running at http://localhost:${PORT}`);
+  console.log(`[server]: Environment: ${env.NODE_ENV}`);
 
   try {
     await CapabilityManager.initialize();
